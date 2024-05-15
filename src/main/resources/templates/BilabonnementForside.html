@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/styles.css}">
+
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src=>
+
+
+</header>
+
+<div class="login-container">
+    <h2>Log ind</h2>
+    <form class="login-form" action="/login" method="post">
+        <input type="text" name="username" placeholder="Brugernavn" required>
+        <input type="password" name="password" placeholder="Adgangskode" required>
+        <button type="submit">Log ind</button>
+    </form>
+</div>
+</body>
+</html>
