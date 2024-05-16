@@ -1,11 +1,11 @@
-package dk.kea.bilabonnement.model;
+package dk.kea.bilabonnement.controller;
 
+import dk.kea.bilabonnement.model.Bil;
 import dk.kea.bilabonnement.service.bilOpretValidation;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public class bilabonnementController {
 
@@ -30,32 +30,26 @@ public class bilabonnementController {
     ) {
 
         bilOpretValidation validation = new bilOpretValidation();
-
-        model.addAttribute("stelnummer", stelnummer);
-        model.addAttribute("brand", brand);
-        model.addAttribute("bilmodel", bilmodel);
-        model.addAttribute("type", type);
-        model.addAttribute("nummerplade", nummerplade);
-        model.addAttribute("fuel", fuel);
+        Bil bil = new Bil(stelnummer, brand, bilmodel, type, nummerplade, fuel);
 
         String fejlbesked = null;
 
         if (!validation.validateStelnummer(stelnummer)) {
             fejlbesked = "Ugyldigt Stelnummer";
-            model.addAttribute(fejlbesked);
+            model.addAttribute("fejlbesked",fejlbesked);
         } else if (!validation.validateBrand(brand)) {
             fejlbesked = "Ugyldigt Brand";
-            model.addAttribute(fejlbesked);
+            model.addAttribute("fejlbesked", fejlbesked);
         } else if (!validation.validateModel(bilmodel)) {
             fejlbesked = "Ugyldig Model";
-            model.addAttribute(fejlbesked);
+            model.addAttribute("fejlbesked", fejlbesked);
         } else if (!validation.validateNummerplade(nummerplade)) {
             fejlbesked = "Ugyldig Nummerplade";
-            model.addAttribute(fejlbesked);
+            model.addAttribute("fejlbesked", fejlbesked);
         }
 
         if (fejlbesked != null) {
-            return "OpretBilFejl";
+            return "redirect:/OpretBilFejl";
         }
 
 
