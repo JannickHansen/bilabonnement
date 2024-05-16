@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret Bil</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/styles.css}">
+</head>
+<body>
+
+<header class="header2">
+  <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src=>
+</header>
+
+<div class="opretBil-container">
+  <h2>Opret Ny Bil</h2>
+  <form class="opretBil-form" action="/bilDataTjek" method="post">
+    <label for="stelnummer">Stelnummer:</label>
+    <input type="text" id="stelnummer" name="stelnummer" placeholder="Stelnummer" required>
+    <label for="brand">Mærke:</label>
+    <input type="text" id="brand" name="brand" placeholder="Mærke" required>
+    <label for="bilmodel">Model:</label>
+    <input type="text" id="bilmodel" name="bilmodel" placeholder="Model" required>
+
+    <label for="type">Type:</label>
+    <select class="opretBil-dropdown" id="type" name="type" required>
+      <option value="" disabled selected>Vælg Type</option>
+      <option value="Carbriolet">Carbriolet</option>
+      <option value="Coupé">Coupé</option>
+      <option value="Crossover">Crossover</option>
+      <option value="Hatchback">Hatchback</option>
+      <option value="Roadster">Roadster</option>
+      <option value="Sedan">Sedan</option>
+      <option value="Sports Tourer">Sports Tourer</option>
+      <option value="Stationcar">Stationcar</option>
+      <option value="SUV">SUV</option>
+      <option value="Lille Varebil">Lille Varebil</option>
+      <option value="Mellem Varebil">Mellem Varebil</option>
+      <option value="Stor Varebil">Stor Varebil</option>
+      <option value="Lille Elektrisk Varebil">Lille Elektrisk Varebil</option>
+      <option value="Mellem Elektrisk Varebil">Mellem Elektrisk Varebil</option>
+    </select>
+
+    <label for="nummerplade">Nummerplade:</label>
+    <input type="text" id="nummerplade" name="nummerplade" placeholder="Nummerplade" required>
+
+    <label for="fuel">Brændstof:</label>
+    <select class="opretBil-dropdown" id="fuel" name="fuel" required>
+      <option value="" disabled selected>Vælg Brændstof</option>
+      <option value="Benzin">Benzin</option>
+      <option value="Diesel">Diesel</option>
+      <option value="Elektrisk">Elektrisk</option>
+      <option value="Gas">Gas</option>
+    </select>
+
+    <button type="submit">Opret</button>
+  </form>
+</div>
+
+</body>
+</html>

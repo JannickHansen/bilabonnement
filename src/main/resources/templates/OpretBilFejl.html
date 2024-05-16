@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret Bil</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/styles.css}">
+</head>
+<body>
+
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src=>
+</header>
+
+<div class="opretBil-container">
+    <h2>Opret Ny Bil</h2>
+    <form class="opretBil-form" action="/login" method="post">
+        <label for="stelnummer">Stelnummer:</label>
+        <input type="text" id="stelnummer" name="stelnummer" required th:value="${stelnummer}">
+        <label for="brand">Mærke:</label>
+        <input type="text" id="brand" name="brand" placeholder="Mærke" required th:value="${brand}">
+        <label for="bilmodel">Model:</label>
+        <input type="text" id="bilmodel" name="bilmodel" placeholder="Model" required th:value="${bilmodel}">
+        <label for="type">Type:</label>
+
+        <select class="opretBil-dropdown" id="type" name="type" required>
+            <option value="" disabled>Select Type</option>
+            <option value="Carbriolet" th:selected="${type == 'Carbriolet'}">Carbriolet</option>
+            <option value="Coupé" th:selected="${type == 'Coupé'}">Coupé</option>
+            <option value="Crossover" th:selected="${type == 'Crossover'}">Crossover</option>
+            <option value="Hatchback" th:selected="${type == 'Hatchback'}">Hatchback</option>
+            <option value="Roadster" th:selected="${type == 'Roadster'}">Roadster</option>
+            <option value="Sedan" th:selected="${type == 'Sedan'}">Sedan</option>
+            <option value="Sports Tourer" th:selected="${type == 'Sports Tourer'}">Sports Tourer</option>
+            <option value="Stationcar" th:selected="${type == 'Stationcar'}">Stationcar</option>
+            <option value="SUV" th:selected="${type == 'SUV'}">SUV</option>
+            <option value="Lille Varebil" th:selected="${type == 'Lille Varebil'}">Lille Varebil</option>
+            <option value="Mellem Varebil" th:selected="${type == 'Mellem Varebil'}">Mellem Varebil</option>
+            <option value="Stor Varebil" th:selected="${type == 'Stor Varebil'}">Stor Varebil</option>
+            <option value="Lille Elektrisk Varebil" th:selected="${type == 'Lille Elektrisk Varebil'}">Lille Elektrisk Varebil</option>
+            <option value="Mellem Elektrisk Varebil" th:selected="${type == 'Mellem Elektrisk Varebil'}">Mellem Elektrisk Varebil</option>
+        </select>
+
+
+        <label for="nummerplade">Nummerplade:</label>
+        <input type="text" id="nummerplade" name="nummerplade" placeholder="Nummerplade" required th:value="${nummerplade}">
+
+        <label for="fuel">Brændstof:</label>
+        <select class="opretBil-dropdown" id="fuel" name="fuel" required>
+            <option value="" disabled>Vælg Brændstof</option>
+            <option value="Benzin" th:selected="${fuel == 'Benzin'}">Benzin</option>
+            <option value="Diesel" th:selected="${fuel == 'Diesel'}">Diesel</option>
+            <option value="Elektrisk" th:selected="${fuel == 'Elektrisk'}">Elektrisk</option>
+            <option value="Gas" th:selected="${fuel == 'Gas'}">Gas</option>
+        </select>
+
+        <div class="error-text">
+            <span th:text="${fejlbesked}"></span>
+        </div>
+        <button type="submit">Opret</button>
+    </form>
+</div>
+
+</body>
+</html>

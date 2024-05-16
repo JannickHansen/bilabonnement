@@ -60,3 +60,73 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.opretBil-container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.opretBil-container h2 {
+    text-align: center;
+    color: black;
+}
+
+.opretBil-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: black;
+}
+
+.opretBil-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+.opretBil-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.opretBil-form button:hover {
+    background-color: deepskyblue;
+}
+
+.opretBil-dropdown {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.opretBil-dropdown::after {
+    content: "\25BC";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.opretBil-dropdown option {
+    padding: 10px;
+    background-color: white;
+    color: black;
+}
+.error-text {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
