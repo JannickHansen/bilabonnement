@@ -16,7 +16,7 @@
     <h2>Opret Ny Bil</h2>
     <form class="opretBil-form" action="/login" method="post">
         <label for="stelnummer">Stelnummer:</label>
-        <input type="text" id="stelnummer" name="stelnummer" required th:value="${stelnummer}">
+        <input type="text" id="stelnummer" name="stelnummer" placeholder="Stelnummer" required th:value="${stelnummer}">
         <label for="brand">Mærke:</label>
         <input type="text" id="brand" name="brand" placeholder="Mærke" required th:value="${brand}">
         <label for="bilmodel">Model:</label>
