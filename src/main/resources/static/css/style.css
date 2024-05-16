@@ -130,4 +130,27 @@ body {
     text-align: center;
     margin-top: 10px;
 }
+.AdminContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+.adminbtn {
+    width: 35%;
+    height: 300px;
+    background-color: #1893C3;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 10px;
+    font-size: xx-large;
+    font-weight: bold;
+}
+.adminimg {
+    margin-top: 10px;
+}
+
 
