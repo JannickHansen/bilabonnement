@@ -129,7 +129,8 @@ body {
 .error-text {
     color: red;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
+    padding-bottom: 15px;
 }
 .AdminContainer {
     display: flex;

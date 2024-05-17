@@ -16,13 +16,13 @@
 
 <div class="opretBil-container">
   <h2>Opret Ny Bil</h2>
-  <form class="opretBil-form" action="/bilDataTjek" method="post">
-    <label for="stelnummer">Stelnummer:</label>
-    <input type="text" id="stelnummer" name="stelnummer" placeholder="Stelnummer" required>
+  <form class="opretBil-form" action="/OpretBilFejl" method="post">
+    <label for="chassisNumber">Stelnummer:</label>
+    <input type="text" id="chassisNumber" name="chassisNumber" placeholder="Stelnummer" required>
     <label for="brand">Mærke:</label>
     <input type="text" id="brand" name="brand" placeholder="Mærke" required>
-    <label for="bilmodel">Model:</label>
-    <input type="text" id="bilmodel" name="bilmodel" placeholder="Model" required>
+    <label for="carModel">Model:</label>
+    <input type="text" id="carModel" name="carModel" placeholder="Model" required>
 
     <label for="type">Type:</label>
     <select class="opretBil-dropdown" id="type" name="type" required>
@@ -43,8 +43,8 @@
       <option value="Mellem Elektrisk Varebil">Mellem Elektrisk Varebil</option>
     </select>
 
-    <label for="nummerplade">Nummerplade:</label>
-    <input type="text" id="nummerplade" name="nummerplade" placeholder="Nummerplade" required>
+    <label for="licensePlate">Nummerplade:</label>
+    <input type="text" id="licensePlate" name="licensePlate" placeholder="Nummerplade" required>
 
     <label for="fuel">Brændstof:</label>
     <select class="opretBil-dropdown" id="fuel" name="fuel" required>
