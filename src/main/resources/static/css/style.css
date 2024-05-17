@@ -93,14 +93,17 @@ body {
 .opretBil-form button {
     width: 100%;
     padding: 10px;
-    background-color: dodgerblue;
+    background-color: #1893C3;
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
 }
-.opretBil-form button:hover {
-    background-color: deepskyblue;
+.small-button button:hover {
+    background-color: #126584;
+}
+.small-button:active {
+    background-color: #043648;
 }
 
 .opretBil-dropdown {
