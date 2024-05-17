@@ -1,33 +1,34 @@
 package dk.kea.bilabonnement.service;
 
-import java.util.regex.Pattern;
+import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+@Service
 public class bilOpretValidation {
 
-    Pattern patternLetter = Pattern.compile("[^a-zA]");
+    Pattern patternLetter = Pattern.compile("[^a-zA-Z]");
     Pattern patternLetterNumber = Pattern.compile("[^a-zA-Z0-9]");
-    Pattern patternNummerplade = Pattern.compile("^[a-zA-Z]{2}");
-    public boolean validateStelnummer(String stelnummer) {
+    Pattern patternLicensePlate = Pattern.compile("^[a-zA-Z]{2}\\d{5}$");
+    public boolean validateChassisNumber(String chassisNumber) {
 
-        if (stelnummer.length()!=17) {
+        if (chassisNumber.length()!=17) {
             return false;
         } else {
-            return !patternLetterNumber.matcher(stelnummer).find();
+            return !patternLetterNumber.matcher(chassisNumber).find();
         }
     }
     public boolean validateBrand(String brand) {
         return !patternLetter.matcher(brand).find();
     }
-    public boolean validateModel(String bilmodel) {
-        return !patternLetterNumber.matcher(bilmodel).find();
+    public boolean validateCarModel(String carModel) {
+        return !patternLetterNumber.matcher(carModel).find();
     }
-    public boolean validateNummerplade(String nummerplade) {
-        if (nummerplade.length()!=7) {
-            return false;
-        } else if (!patternLetterNumber.matcher(nummerplade).find()) {
+    public boolean validateLicensePlate(String licensePlate) {
+        if (licensePlate.length() != 7) {
             return false;
         } else {
-            return !patternNummerplade.matcher(nummerplade).find();
+            return patternLicensePlate.matcher(licensePlate).find();
         }
     }
+
 }

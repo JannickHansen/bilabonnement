@@ -1,6 +1,9 @@
 package dk.kea.bilabonnement.controller;
 
+import dk.kea.bilabonnement.model.BilModel;
+import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.service.bilOpretValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class bilabonnementController {
+
+    @Autowired
+    BilRepo bilRepo;
 
     @GetMapping("/")
     public String forside() {
@@ -20,47 +26,57 @@ public class bilabonnementController {
         return "OpretBil";
     }
 
-    @PostMapping("/bilDataTjek")
-    public String bilDataTjek(@RequestParam("stelnummer") String stelnummer,
+    /* Postmapping som validere bil informationen ift. format, unikhed osv., og så enten redirecter
+       til fejlsiden med fejlbesked, eller tilbage til dataregistrer siden. */
+    @PostMapping("/OpretBilFejl")
+    public String bilDataTjek(@RequestParam("chassisNumber") String chassisNumber,
                               @RequestParam("brand") String brand,
-                              @RequestParam("bilmodel") String bilmodel,
+                              @RequestParam("carModel") String carModel,
                               @RequestParam("type") String type,
-                              @RequestParam("nummerplade") String nummerplade,
+                              @RequestParam("licensePlate") String licensePlate,
                               @RequestParam("fuel") String fuel,
                               Model model
     ) {
 
         bilOpretValidation validation = new bilOpretValidation();
 
-        model.addAttribute("stelnummer", stelnummer);
+        model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
-        model.addAttribute("bilmodel", bilmodel);
+        model.addAttribute("carModel", carModel);
         model.addAttribute("type", type);
-        model.addAttribute("nummerplade", nummerplade);
+        model.addAttribute("licensePlate", licensePlate);
         model.addAttribute("fuel", fuel);
 
-        String fejlbesked = null;
+        String errorText = null;
 
-        if (!validation.validateStelnummer(stelnummer)) {
-            fejlbesked = "Ugyldigt Stelnummer";
-            model.addAttribute(fejlbesked);
+        if (!validation.validateChassisNumber(chassisNumber)) {
+            errorText = "Ugyldigt Stelnummer";
         } else if (!validation.validateBrand(brand)) {
-            fejlbesked = "Ugyldigt Brand";
-            model.addAttribute(fejlbesked);
-        } else if (!validation.validateModel(bilmodel)) {
-            fejlbesked = "Ugyldig Model";
-            model.addAttribute(fejlbesked);
-        } else if (!validation.validateNummerplade(nummerplade)) {
-            fejlbesked = "Ugyldig Nummerplade";
-            model.addAttribute(fejlbesked);
+            errorText = "Ugyldigt Mærke";
+        } else if (!validation.validateCarModel(carModel)) {
+            errorText = "Ugyldig Model";
+        } else if (!validation.validateLicensePlate(licensePlate)) {
+            errorText = "Ugyldig Nummerplade";
         }
 
-        if (fejlbesked != null) {
+        int carUniquenessCheck = BilRepo.authenticateUniqueCar(chassisNumber, licensePlate);
+
+        if (carUniquenessCheck == 1) {
+            errorText = "Stelnummer er allerede oprettet";
+        } else if (carUniquenessCheck == 2) {
+            errorText = "Nummerplade er allerede oprettet";
+        }
+
+        model.addAttribute("errorText",errorText);
+        if (errorText != null) {
             return "OpretBilFejl";
         }
 
+        BilModel bil = new BilModel(chassisNumber, brand, carModel, type, licensePlate, fuel);
+        bil.setAvailable();
+        bilRepo.create(bil);
 
-        return "BilabonnementForside";
+        return "redirect:/";
     }
 
     @GetMapping("/OpretBilFejl")

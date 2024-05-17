@@ -14,13 +14,13 @@
 
 <div class="opretBil-container">
     <h2>Opret Ny Bil</h2>
-    <form class="opretBil-form" action="/login" method="post">
-        <label for="stelnummer">Stelnummer:</label>
-        <input type="text" id="stelnummer" name="stelnummer" placeholder="Stelnummer" required th:value="${stelnummer}">
+    <form class="opretBil-form" action="/OpretBilFejl" method="post">
+        <label for="chassisNumber">Stelnummer:</label>
+        <input type="text" id="chassisNumber" name="chassisNumber" placeholder="Stelnummer" required th:value="${chassisNumber}">
         <label for="brand">Mærke:</label>
         <input type="text" id="brand" name="brand" placeholder="Mærke" required th:value="${brand}">
-        <label for="bilmodel">Model:</label>
-        <input type="text" id="bilmodel" name="bilmodel" placeholder="Model" required th:value="${bilmodel}">
+        <label for="carModel">Model:</label>
+        <input type="text" id="carModel" name="carModel" placeholder="Model" required th:value="${carModel}">
         <label for="type">Type:</label>
 
         <select class="opretBil-dropdown" id="type" name="type" required>
@@ -42,8 +42,8 @@
         </select>
 
 
-        <label for="nummerplade">Nummerplade:</label>
-        <input type="text" id="nummerplade" name="nummerplade" placeholder="Nummerplade" required th:value="${nummerplade}">
+        <label for="licensePlate">Nummerplade:</label>
+        <input type="text" id="licensePlate" name="licensePlate" placeholder="Nummerplade" required th:value="${licensePlate}">
 
         <label for="fuel">Brændstof:</label>
         <select class="opretBil-dropdown" id="fuel" name="fuel" required>
@@ -55,7 +55,7 @@
         </select>
 
         <div class="error-text">
-            <span th:text="${fejlbesked}"></span>
+            <span th:text="${errorText}"></span>
         </div>
         <button type="submit">Opret</button>
     </form>
