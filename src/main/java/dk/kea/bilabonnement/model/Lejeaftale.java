@@ -7,9 +7,9 @@ public class Lejeaftale {
     LocalDate pickuptime;
     String renttype;
     String pickuplocation;
-    Bil bil;
+    BilModel bil;
 
-    public Lejeaftale(LocalDate pickupdate, LocalDate pickuptime, String renttype, String pickuplocation, Bil bil) {
+    public Lejeaftale(LocalDate pickupdate, LocalDate pickuptime, String renttype, String pickuplocation, BilModel bil) {
         this.pickupdate = pickupdate;
         this.pickuptime = pickuptime;
         this.renttype = renttype;
@@ -33,7 +33,7 @@ public class Lejeaftale {
         return pickuplocation;
     }
 
-    public Bil getBil() {
+    public BilModel getBil() {
         return bil;
     }
 
@@ -53,7 +53,7 @@ public class Lejeaftale {
         this.pickuplocation = pickuplocation;
     }
 
-    public void setBil(Bil bil) {
+    public void setBil(BilModel bil) {
         this.bil = bil;
     }
 }
