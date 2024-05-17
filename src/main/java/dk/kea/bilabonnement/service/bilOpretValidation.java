@@ -1,7 +1,10 @@
 package dk.kea.bilabonnement.service;
 
-import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
+@Service
 public class bilOpretValidation {
 
     Pattern patternLetter = Pattern.compile("[^a-zA]");
@@ -15,6 +18,7 @@ public class bilOpretValidation {
             return !patternLetterNumber.matcher(stelnummer).find();
         }
     }
+
     public boolean validateBrand(String brand) {
         return !patternLetter.matcher(brand).find();
     }
