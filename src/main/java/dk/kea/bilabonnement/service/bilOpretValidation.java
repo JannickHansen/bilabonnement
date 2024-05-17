@@ -1,8 +1,7 @@
 package dk.kea.bilabonnement.service;
-
 import org.springframework.stereotype.Service;
-
 import java.util.regex.Pattern;
+
 @Service
 public class bilOpretValidation {
 
@@ -17,6 +16,7 @@ public class bilOpretValidation {
             return !patternLetterNumber.matcher(chassisNumber).find();
         }
     }
+
     public boolean validateBrand(String brand) {
         return !patternLetter.matcher(brand).find();
     }

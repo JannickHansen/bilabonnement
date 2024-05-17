@@ -84,4 +84,7 @@ public class bilabonnementController {
         return "OpretBilFejl";
     }
 
+    @GetMapping("/Administrator")
+    public String admin(){return "Admin";}
+
 }
