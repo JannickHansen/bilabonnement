@@ -136,19 +136,6 @@ body {
     padding-bottom: 15px;
 }
 
-.adminbtn {
-    width: 35%;
-    height: 300px;
-    background-color: #1893C3;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    padding: 10px;
-    margin: 10px;
-    font-size: xx-large;
-    font-weight: bold;
-}
 
 .logud-knap {
     padding: 10px 20px;
