@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+
+    <button class="logud-knap">Log ud</button>
+</header>
+
+
+<div class="register-container">
+    <button class="registerbtn">Bekræft lejeaftale<br>
+        <img src="../static/img/check-mark-icon.jpg" width="100px" height="100px" th:src="@{/img/check-mark-icon.jpg}" class="adminimg">
+    </button>
+    <button class="registerbtn">Tilbagelevering<br>
+        <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="adminimg">
+    </button>
+</div>
+</body>
+</html>
