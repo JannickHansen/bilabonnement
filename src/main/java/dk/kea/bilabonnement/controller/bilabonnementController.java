@@ -87,4 +87,7 @@ public class bilabonnementController {
     @GetMapping("/Administrator")
     public String admin(){return "Admin";}
 
+    @GetMapping("/Forretningsudvikler")
+    public String forretningudv(){return "Forretningsudvikler";}
+
 }
