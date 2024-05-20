@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Fleet</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button class="logud-knap">Log ud</button>
+</header>
+
+<div class="button-container">
+        <button class="opretBilButton" onclick="window.location.href='/OpretBil'">Opret Bil</button>
+        <button class="opretBilButton" onclick="window.location.href='/FjernBil'">Fjern Bil</button>
+</div>
+<div class="manageWrapper">
+    <div class="manage-container">
+        <h2>Fleet List</h2>
+        <div th:each="bil : ${fleetList}" class="carbox">
+            <h3 th:text="${bil.carModel} + ' (' + ${bil.brand} + ')'"></h3>
+            <p><strong>Stelnummer:</strong> <span th:text="${bil.chassisNumber}"></span></p>
+            <p><strong>Type:</strong> <span th:text="${bil.type}"></span></p>
+            <p><strong>Nummerplade:</strong> <span th:text="${bil.licensePlate}"></span></p>
+            <p><strong>Brændstof:</strong> <span th:text="${bil.fuel}"></span></p>
+            <p><strong>Status:</strong> <span th:text="${bil.status}"></span></p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
