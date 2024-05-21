@@ -2,6 +2,7 @@ package dk.kea.bilabonnement.repository;
 
 import dk.kea.bilabonnement.model.BilModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -62,6 +63,51 @@ public class BilRepo {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public List<BilModel> loadAllCars() {
+        return loadCars("SELECT * FROM bil");
+    }
+
+    public List<BilModel> loadLeasedCars() {
+        return loadCars("SELECT * FROM bil WHERE status = 'udlejet' ORDER BY status");
+    }
+
+    private List<BilModel> loadCars(String sql) {
+        List<BilModel> foundCars = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                BilModel bil = new BilModel();
+                bil.setChassisNumber(resultSet.getString("chassisNumber"));
+                bil.setLicensePlate(resultSet.getString("LicensePlate"));
+                bil.setBrand(resultSet.getString("brand"));
+                bil.setCarModel(resultSet.getString("carModel"));
+                bil.setType(resultSet.getString("type"));
+                bil.setFuel(resultSet.getString("fuel"));
+                bil.setStatus(resultSet.getString("status"));
+                bil.setEmployeeID(resultSet.getInt("employeeID"));
+
+                foundCars.add(bil);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return foundCars;
+    }
+
+    public void deleteChassisNumber(String chassisNumber){
+        final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
+        jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
+    }
+
+
+    // Metode som modtager chassisnummer og den nye status, og så opdatere status
+    public void changeStatusOnCar(String chassisNumber, String newStatus) {
+        final String UPDATE_STATUS_BY_CHASSISNUMBER_SQL = "UPDATE bil SET status = ? WHERE chassisNumber = ?";
+        jdbcTemplate.update(UPDATE_STATUS_BY_CHASSISNUMBER_SQL, newStatus, chassisNumber);
     }
 
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret Medarbejder</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button class="logud-knap">Log ud</button>
+
+</header>
+
+<div class="opretBil-container">
+    <h2>Opret Ny Medarbejder</h2>
+    <form class="opretBil-form" action="/OpretBruger" method="post">
+        <label for="login">Brugernavn:</label>
+        <input type="text" id="login" name="login" placeholder="Brugernavn" required>
+        <label for="password">Kodeord</label>
+        <input type="text" id="password" name="password" placeholder="Kodeord" required>
+
+        <label for="role">Rolle:</label>
+        <select class="opretBil-dropdown" id="role" name="role" required>
+            <option value="" disabled selected>Vælg Rolle</option>
+            <option value="Administrator">Administrator</option>
+            <option value="Dataregistrer">Dataregistrer</option>
+            <option value="SkadeOgUdbedring">Skade og Udbedring</option>
+            <option value="Forretningsudvikler">Forretningsudvikler</option>
+        </select>
+        <button class="small-button" type="submit">Opret</button>
+
+    </form>
+</div>
+
+</body>
+</html>

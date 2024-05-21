@@ -1,8 +1,13 @@
 package dk.kea.bilabonnement.controller;
 
 import dk.kea.bilabonnement.model.BilModel;
+import dk.kea.bilabonnement.model.Bruger;
 import dk.kea.bilabonnement.repository.BilRepo;
+import dk.kea.bilabonnement.service.BilService;
+import dk.kea.bilabonnement.repository.BrugerRepo;
+import dk.kea.bilabonnement.service.BrugerService;
 import dk.kea.bilabonnement.service.bilOpretValidation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class bilabonnementController {
+    @Autowired
+    BrugerRepo brugerRepo;
 
     @Autowired
     BilRepo bilRepo;
@@ -21,6 +30,25 @@ public class bilabonnementController {
         return "BilabonnementForside";
     }
 
+    @PostMapping("/")
+        public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
+            Bruger bruger = brugerRepo.getBruger(login, password);
+        if (bruger == null) {
+            return "redirect:/";
+
+        } else {
+            BrugerService brugerService = new BrugerService();
+              brugerService.gemBruger(request, bruger);
+            return switch (bruger.getRole()) {
+                case "Administrator" -> "redirect:/Administrator";
+                case "Dataregistrer" -> "redirect:/registrer";
+                case "SkadeOgUdbedring" -> "redirect:/skade";
+                case "Forretningsudvikler" -> "redirect:/Forretningsudvikler";
+                default -> "redirect:/";
+            };
+
+        }
+    }
     @GetMapping("/OpretBil")
     public String opretBil() {
         return "OpretBil";
@@ -38,7 +66,7 @@ public class bilabonnementController {
                               Model model
     ) {
 
-        bilOpretValidation validation = new bilOpretValidation();
+        BilService validation = new BilService();
 
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
@@ -67,6 +95,7 @@ public class bilabonnementController {
             errorText = "Nummerplade er allerede oprettet";
         }
 
+        /* Hvis en fejl findes, indsættes teksten i modellen, og dette sendes til opretbilfejl siden. */
         model.addAttribute("errorText",errorText);
         if (errorText != null) {
             return "OpretBilFejl";
@@ -76,7 +105,7 @@ public class bilabonnementController {
         bil.setAvailable();
         bilRepo.create(bil);
 
-        return "redirect:/";
+        return "redirect:/manageFleet";
     }
 
     @GetMapping("/OpretBilFejl")
@@ -87,7 +116,44 @@ public class bilabonnementController {
     @GetMapping("/Administrator")
     public String admin(){return "Admin";}
 
+    @GetMapping("/manageFleet")
+    public String manageFleet(Model model) {
+        List<BilModel> fleetList = bilRepo.loadAllCars();
+        model.addAttribute("fleetList", fleetList);
+        return "manageFleet"; }
+
+    @GetMapping("/FjernBil")
+    public String fjernBil(Model model) {
+        List<BilModel> fleetList = bilRepo.loadAllCars();
+        model.addAttribute("fleetList", fleetList);
+        return "FjernBil"; }
+
+    @PostMapping("/FjernBil")
+    public String bilFjernes(@RequestParam("chassisNumber") String chassisNumber, Model model) {
+        bilRepo.deleteChassisNumber(chassisNumber);
+        List<BilModel> fleetList = bilRepo.loadAllCars();
+        model.addAttribute("fleetList", fleetList);
+        return "FjernBil";
+    }
+  
     @GetMapping("/Forretningsudvikler")
     public String forretningudv(){return "Forretningsudvikler";}
+    @GetMapping("/registrer")
+    public String registrer(){return "register";}
+    @GetMapping("/skade")
+    public String skade(){return "skade";}
 
+    @GetMapping("/OpretBruger")
+    public String opretBruger(){return "OpretBruger";}
+    @PostMapping("/OpretBruger")
+    public String nyBruger(
+            @RequestParam("login") String login,
+            @RequestParam("password") String password,
+            @RequestParam("role") String role
+
+    ) {
+        Bruger bruger = new Bruger(login, password, role);
+        brugerRepo.create(bruger);
+        return "redirect:/Administrator";
+    }
 }
