@@ -3,7 +3,7 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Pattern;
 
 @Service
-public class bilOpretValidation {
+public class BilService {
 
     Pattern patternLetter = Pattern.compile("[^a-zA-Z]");
     Pattern patternLetterNumber = Pattern.compile("[^a-zA-Z0-9]");
@@ -30,5 +30,7 @@ public class bilOpretValidation {
             return patternLicensePlate.matcher(licensePlate).find();
         }
     }
+
+
 
 }
