@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Lejeaftale {
+    private BilModel bil;
     private int Lejeaftale_id;
     private String chassisNumber;
     private Date dato;
@@ -25,6 +26,17 @@ public class Lejeaftale {
         Afhentningssted = afhentningssted;
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
+    }
+    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, BilModel bil) {
+        Lejeaftale_id = lejeaftale_id;
+        this.chassisNumber = chassisNumber;
+        this.dato = dato;
+        Udlejnings_Type = udlejnings_Type;
+        Afhentningstidspunkt = afhentningstidspunkt;
+        Afhentningssted = afhentningssted;
+        Medarbejder_id = medarbejder_id;
+        Kunde_id = kunde_id;
+        this.bil = bil;
     }
 
     public int getLejeaftale_id() {
@@ -89,6 +101,14 @@ public class Lejeaftale {
 
     public void setKunde_id(int kunde_id) {
         Kunde_id = kunde_id;
+    }
+
+    public void setBilModel(BilModel bil){
+        this.bil = bil;
+    }
+
+    public BilModel getBilModel(){
+        return this.bil;
     }
 
 }
