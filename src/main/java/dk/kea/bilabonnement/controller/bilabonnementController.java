@@ -2,16 +2,18 @@ package dk.kea.bilabonnement.controller;
 
 import dk.kea.bilabonnement.model.BilModel;
 import dk.kea.bilabonnement.model.Bruger;
+import dk.kea.bilabonnement.model.Lejeaftale;
 import dk.kea.bilabonnement.repository.BilRepo;
+import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import dk.kea.bilabonnement.service.BilService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
-import dk.kea.bilabonnement.service.bilOpretValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,6 +26,10 @@ public class bilabonnementController {
 
     @Autowired
     BilRepo bilRepo;
+
+    @Autowired
+    LejeaftaleRepo lejeaftaleRepo;
+
 
     @GetMapping("/")
     public String forside() {
@@ -156,4 +162,18 @@ public class bilabonnementController {
         brugerRepo.create(bruger);
         return "redirect:/Administrator";
     }
+
+
+    @GetMapping("/vaelglejeaftale")
+    public String showVaelglejeaftale(Model model) {
+        List<Lejeaftale> lejeaftaler = lejeaftaleRepo.findAll();
+        model.addAttribute("Lejeaftale", lejeaftaler);
+        return "vaelglejeaftale";
+    }
+    @GetMapping("/tilbagelevering/{Lejeaftale_id}")
+    public String showTilbagelevering(@PathVariable("Lejeaftale_id") int lejeaftale_id, Model model){
+
+        return "tilbagelevering";
+    }
 }
+

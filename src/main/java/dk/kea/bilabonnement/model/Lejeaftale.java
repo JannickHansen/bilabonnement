@@ -1,59 +1,94 @@
 package dk.kea.bilabonnement.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Lejeaftale {
-    LocalDate pickupdate;
-    LocalDate pickuptime;
-    String renttype;
-    String pickuplocation;
-    BilModel bil;
+    private int Lejeaftale_id;
+    private String chassisNumber;
+    private Date dato;
+    private String Udlejnings_Type;
+    private Date Afhentningstidspunkt;
+    private String Afhentningssted;
+    private int Medarbejder_id;
+    private int Kunde_id;
 
-    public Lejeaftale(LocalDate pickupdate, LocalDate pickuptime, String renttype, String pickuplocation, BilModel bil) {
-        this.pickupdate = pickupdate;
-        this.pickuptime = pickuptime;
-        this.renttype = renttype;
-        this.pickuplocation = pickuplocation;
-        this.bil = bil;
+    public Lejeaftale() {
     }
 
-    public LocalDate getPickupdate() {
-        return pickupdate;
+    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id) {
+        Lejeaftale_id = lejeaftale_id;
+        this.chassisNumber = chassisNumber;
+        this.dato = dato;
+        Udlejnings_Type = udlejnings_Type;
+        Afhentningstidspunkt = afhentningstidspunkt;
+        Afhentningssted = afhentningssted;
+        Medarbejder_id = medarbejder_id;
+        Kunde_id = kunde_id;
     }
 
-    public LocalDate getPickuptime() {
-        return pickuptime;
+    public int getLejeaftale_id() {
+        return Lejeaftale_id;
     }
 
-    public String getRenttype() {
-        return renttype;
+    public void setLejeaftale_id(int lejeaftale_id) {
+        Lejeaftale_id = lejeaftale_id;
     }
 
-    public String getPickuplocation() {
-        return pickuplocation;
+    public String getChassisNumber() {
+        return chassisNumber;
     }
 
-    public BilModel getBil() {
-        return bil;
+    public void setChassisNumber(String chassisNumber) {
+        this.chassisNumber = chassisNumber;
     }
 
-    public void setPickupdate(LocalDate pickupdate) {
-        this.pickupdate = pickupdate;
+    public Date getDato() {
+        return dato;
     }
 
-    public void setPickuptime(LocalDate pickuptime) {
-        this.pickuptime = pickuptime;
+    public void setDato(Date dato) {
+        this.dato = dato;
     }
 
-    public void setRenttype(String renttype) {
-        this.renttype = renttype;
+    public String getUdlejnings_Type() {
+        return Udlejnings_Type;
     }
 
-    public void setPickuplocation(String pickuplocation) {
-        this.pickuplocation = pickuplocation;
+    public void setUdlejnings_Type(String udlejnings_Type) {
+        Udlejnings_Type = udlejnings_Type;
     }
 
-    public void setBil(BilModel bil) {
-        this.bil = bil;
+    public Date getAfhentningstidspunkt() {
+        return Afhentningstidspunkt;
     }
+
+    public void setAfhentningstidspunkt(Date afhentningstidspunkt) {
+        Afhentningstidspunkt = afhentningstidspunkt;
+    }
+
+    public String getAfhentningssted() {
+        return Afhentningssted;
+    }
+
+    public void setAfhentningssted(String afhentningssted) {
+        Afhentningssted = afhentningssted;
+    }
+
+    public int getMedarbejder_id() {
+        return Medarbejder_id;
+    }
+
+    public void setMedarbejder_id(int medarbejder_id) {
+        Medarbejder_id = medarbejder_id;
+    }
+
+    public int getKunde_id() {
+        return Kunde_id;
+    }
+
+    public void setKunde_id(int kunde_id) {
+        Kunde_id = kunde_id;
+    }
+
 }
