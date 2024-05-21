@@ -135,28 +135,7 @@ body {
     margin-top: 5px;
     padding-bottom: 15px;
 }
-.AdminContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-.adminbtn {
-    width: 35%;
-    height: 300px;
-    background-color: #1893C3;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    padding: 10px;
-    margin: 10px;
-    font-size: xx-large;
-    font-weight: bold;
-}
-.adminimg {
-    margin-top: 10px;
-}
+
 
 .logud-knap {
     padding: 10px 20px;
@@ -177,14 +156,14 @@ body {
     background-color: #e0e0e0;
 }
 
-.register-container {
+.box-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin-top: 200px;
+    margin-top: 100px;
 }
-.registerbtn {
+.containerbtn {
     width: 35%;
     height: 300px;
     background-color: #1893C3;
@@ -197,11 +176,11 @@ body {
     font-size: xx-large;
     font-weight: bold;
 }
-.registerbtn:hover {
+.containerbtn:hover {
     background-color: #126584;
 }
 
-.registerbtn:active {
+.containerbtn:active {
     background-color: #043648;
 }
 
@@ -345,6 +324,6 @@ body {
     color: black;
     background-color: white;
 }
-
-
-
+.containerimg {
+    margin-top: 10px;
+}

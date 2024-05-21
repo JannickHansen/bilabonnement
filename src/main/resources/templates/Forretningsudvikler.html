@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement Forretningsudvikler</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button class="logud-knap">Log ud</button>
+</header>
+<div class="box-container">
+    <button class="containerbtn">Nuværende udlejet biler<br>
+        <img src="../static/img/udlBil.png" width="100px" height="100px" th:src="@{/img/udlBil.png}" class="containerimg">
+    </button>
+    <button class="containerbtn">Se alle biler med status<br>
+        <img src="../static/img/skade.png" width="100px" height="100px" th:src="@{/img/skade.png}" class="containerimg">
+    </button>
+    <button class="containerbtn">Totalt beløb for udlejet biler<br>
+        <img src="../static/img/ttlBeløb.png" width="100px" height="100px" th:src="@{/img/ttlBeløb.png}" class="containerimg">
+    </button>
+    <button class="containerbtn">Nøgletal<br>
+        <img src="../static/img/kpi.png" width="100px" height="100px" th:src="@{/img/kpi.png}" class="containerimg">
+    </button>
+</div>
+
+</body>
+</html>
