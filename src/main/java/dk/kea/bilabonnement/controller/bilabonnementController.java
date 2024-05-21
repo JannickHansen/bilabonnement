@@ -8,7 +8,6 @@ import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import dk.kea.bilabonnement.service.BilService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
-import dk.kea.bilabonnement.service.bilOpretValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
