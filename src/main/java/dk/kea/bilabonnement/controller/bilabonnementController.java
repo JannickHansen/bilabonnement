@@ -163,6 +163,9 @@ public class bilabonnementController {
         return "redirect:/Administrator";
     }
 
+    @GetMapping("/NyLejeaftale")
+    public String opretLejeaftale(){return "NyLejeaftale";}
+
 
     @GetMapping("/vaelglejeaftale")
     public String showVaelglejeaftale(Model model) {
