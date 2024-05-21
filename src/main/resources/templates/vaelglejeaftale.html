@@ -14,15 +14,21 @@
     <button class="logud-knap">Log ud</button>
 </header>
 
-
 <div class="box-container">
-    <button class="containerbtn">Bekræft lejeaftale<br>
-        <img src="../static/img/check-mark-icon.jpg" width="100px" height="100px" th:src="@{/img/check-mark-icon.jpg}" class="containerimg">
-    </button>
-    <a th:href="@{'/vaelglejeaftale'}">
-    <button class="containerbtn">Tilbagelevering<br>
-        <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="containerimg">
-    </button></a>
+<div th:each="lejeaftale: ${Lejeaftale}">
+
+    <a th:href="@{'/tilbagelevering/' + ${lejeaftale.Lejeaftale_id}}">
+        <button class="lejeaftalebtn">
+            <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="containerimg">
+            <br>
+            Lejeaftale ID: <span th:text="${lejeaftale.Lejeaftale_id}"></span>
+            <br>
+            Stelnr: <span th:text="${lejeaftale.chassisNumber}"></span>
+
+        </button>
+    </a>
 </div>
+</div>
+
 </body>
 </html>
