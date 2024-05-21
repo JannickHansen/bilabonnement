@@ -89,5 +89,9 @@ public class bilabonnementController {
 
     @GetMapping("/Forretningsudvikler")
     public String forretningudv(){return "Forretningsudvikler";}
+    @GetMapping("/registrer")
+    public String registrer(){return "register";}
+    @GetMapping("/skade")
+    public String skade(){return "skade";}
 
 }
