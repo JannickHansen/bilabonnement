@@ -14,7 +14,7 @@ public class LejeaftaleRepo {
     private JdbcTemplate jdbcTemplate;
 
     public List<Lejeaftale> findAll(){
-        String sql = "SELECT * FROM Lejeaftale";
+        String sql = "SELECT Lejeaftale.*, bil.licensePlate FROM Lejeaftale, bil WHERE Lejeaftale.chassisNumber = bil.chassisNumber";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
     }

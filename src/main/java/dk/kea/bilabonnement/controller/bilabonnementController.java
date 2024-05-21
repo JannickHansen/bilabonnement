@@ -171,15 +171,6 @@ public class bilabonnementController {
     @GetMapping("/vaelglejeaftale")
     public String showVaelglejeaftale(Model model) {
         List<Lejeaftale> lejeaftaler = lejeaftaleRepo.findAll();
-        for (int i=0; i<lejeaftaler.size(); i++) {
-            List<BilModel> liste = bilRepo.loadChassisByInput(lejeaftaler.get(i).getChassisNumber());
-            BilModel tempbil = new BilModel();
-            tempbil.setChassisNumber(liste.getFirst().getChassisNumber());
-            tempbil.setBrand(liste.getFirst().getBrand());
-            tempbil.setFuel(liste.getFirst().getFuel());
-            tempbil.setLicensePlate(liste.getFirst().getLicensePlate());
-            lejeaftaler.get(i).setBilModel(tempbil);
-        }
         model.addAttribute("Lejeaftale", lejeaftaler);
         return "vaelglejeaftale";
     }
