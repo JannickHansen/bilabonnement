@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret bruger</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+</header>
+<div class="login-container">
+    <h2>Opret Bruger</h2>
+    <form class="login-form" id="registerForm">
+        <label for="username">Brugernavn:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Adgangskode:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button class="small-button" type="submit">Opret</button>
+    </form>
+</div>
+</body>
+</html>
