@@ -118,5 +118,7 @@ public class BilRepo {
         RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
-
+    public List<BilModel> loadChassisByInput(String input){
+        return loadCars("SELECT * FROM bil WHERE chassisNumber = '"+input+"'");
+    }
 }
