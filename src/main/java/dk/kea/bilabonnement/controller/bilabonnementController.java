@@ -1,8 +1,12 @@
 package dk.kea.bilabonnement.controller;
 
 import dk.kea.bilabonnement.model.BilModel;
+import dk.kea.bilabonnement.model.Bruger;
 import dk.kea.bilabonnement.repository.BilRepo;
+import dk.kea.bilabonnement.repository.BrugerRepo;
+import dk.kea.bilabonnement.service.BrugerService;
 import dk.kea.bilabonnement.service.bilOpretValidation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class bilabonnementController {
+    @Autowired
+    BrugerRepo brugerRepo;
 
     @Autowired
     BilRepo bilRepo;
@@ -21,6 +27,25 @@ public class bilabonnementController {
         return "BilabonnementForside";
     }
 
+    @PostMapping("/")
+        public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
+            Bruger bruger = brugerRepo.getBruger(login, password);
+        if (bruger == null) {
+            return "redirect:/";
+
+        } else {
+            BrugerService brugerService = new BrugerService();
+              brugerService.gemBruger(request, bruger);
+            return switch (bruger.getRole()) {
+                case "Administrator" -> "redirect:/Administrator";
+                case "Dataregistrer" -> "redirect:/registrer";
+                case "SkadeOgUdbedring" -> "redirect:/skade";
+                case "Forretningsudvikler" -> "redirect:/Forretningsudvikler";
+                default -> "redirect:/";
+            };
+
+        }
+    }
     @GetMapping("/OpretBil")
     public String opretBil() {
         return "OpretBil";
@@ -93,5 +118,19 @@ public class bilabonnementController {
     public String registrer(){return "register";}
     @GetMapping("/skade")
     public String skade(){return "skade";}
+
+    @GetMapping("/OpretBruger")
+    public String opretBruger(){return "OpretBruger";}
+    @PostMapping("/OpretBruger")
+    public String nyBruger(
+            @RequestParam("login") String login,
+            @RequestParam("password") String password,
+            @RequestParam("role") String role
+
+    ) {
+        Bruger bruger = new Bruger(login, password, role);
+        brugerRepo.create(bruger);
+        return "redirect:/Administrator";
+    }
 
 }
