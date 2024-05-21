@@ -3,7 +3,9 @@ package dk.kea.bilabonnement.repository;
 import dk.kea.bilabonnement.model.BilModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -108,6 +110,13 @@ public class BilRepo {
     public void changeStatusOnCar(String chassisNumber, String newStatus) {
         final String UPDATE_STATUS_BY_CHASSISNUMBER_SQL = "UPDATE bil SET status = ? WHERE chassisNumber = ?";
         jdbcTemplate.update(UPDATE_STATUS_BY_CHASSISNUMBER_SQL, newStatus, chassisNumber);
+    }
+
+    // Metode til at vise available cars i en liste fra databasen.
+    public List<BilModel> showAvailableCars(){
+        String sql = "SELECT * FROM Bil WHERE status = 'ledig'";
+        RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
 }
