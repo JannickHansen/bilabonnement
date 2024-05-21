@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Lejeaftale {
-    private BilModel bil;
+    private String licensePlate;
     private int Lejeaftale_id;
     private String chassisNumber;
     private Date dato;
@@ -27,7 +27,7 @@ public class Lejeaftale {
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
     }
-    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, BilModel bil) {
+    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate) {
         Lejeaftale_id = lejeaftale_id;
         this.chassisNumber = chassisNumber;
         this.dato = dato;
@@ -36,7 +36,7 @@ public class Lejeaftale {
         Afhentningssted = afhentningssted;
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
-        this.bil = bil;
+        this.licensePlate = licensePlate;
     }
 
     public int getLejeaftale_id() {
@@ -103,12 +103,12 @@ public class Lejeaftale {
         Kunde_id = kunde_id;
     }
 
-    public void setBilModel(BilModel bil){
-        this.bil = bil;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
-    public BilModel getBilModel(){
-        return this.bil;
+    public String getLicensePlate () {
+        return this.licensePlate;
     }
 
 }
