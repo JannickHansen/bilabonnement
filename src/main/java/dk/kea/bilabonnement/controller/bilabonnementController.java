@@ -141,6 +141,9 @@ public class bilabonnementController {
         model.addAttribute("fleetList", fleetList);
         return "FjernBil";
     }
+
+    @GetMapping("/help")
+    public String helper(){return "help";}
   
     @GetMapping("/Forretningsudvikler")
     public String forretningudv(){return "Forretningsudvikler";}
