@@ -203,7 +203,7 @@ public class bilabonnementController {
 
     private List<Skaderapport> temporarySkadeList = new ArrayList<>();
 
-    @GetMapping("/tilbagelevering")
+    @PostMapping("/tilbagelevering")
     public String showTilbageleveringForm(@RequestParam("chassisNumber") String chassisNumber, Model model) {
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("skadeList", temporarySkadeList);
@@ -211,11 +211,11 @@ public class bilabonnementController {
     }
 
     @PostMapping("/addSkade")
-    public String addSkade(@ModelAttribute Skaderapport skadeRapport) {
+    public String addSkade(@ModelAttribute Skaderapport skadeRapport, Model model) {
         temporarySkadeList.add(skadeRapport);
-        return "redirect:/tilbagelevering?chassisNumber=" + skadeRapport.getChassisNumber();
+        model.addAttribute("skadeList", temporarySkadeList);
+        return "/tilbagelevering";
     }
-
 
     @PostMapping("/submitTotalPrice")
     public String submitTotalPrice(@RequestParam("chassisNumber") String chassisNumber, @ModelAttribute List<Skaderapport> skadeList) {

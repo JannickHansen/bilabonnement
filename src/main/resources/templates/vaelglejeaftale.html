@@ -19,8 +19,8 @@
 
 <div class="box-container">
     <div th:each="Lejeaftale: ${Lejeaftale}">
-        <form th:action="@{/tilbagelevering}" method="get">
-            <button class="lejeaftalebtn">
+        <form action="/tilbagelevering" method="post">
+            <button class="lejeaftalebtn" onclick="location.href='/tilbagelevering'">
                 <input type="hidden" name="chassisNumber" th:value="${Lejeaftale.chassisNumber}">
                 Lejeaftale ID: <span th:text="${Lejeaftale.Lejeaftale_id}"></span><br>
                 <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="containerimg">

@@ -34,7 +34,7 @@ public class SkadeRepo {
         }
 
         // Update Bil status to "ledig"
-        String updateSql = "UPDATE Bil SET status = 'ledig' WHERE chassisNumber = ?";
+        String updateSql = "UPDATE Bil SET status = 'Ledig' WHERE chassisNumber = ?";
         jdbcTemplate.update(updateSql, chassisNumber);
     }
 
@@ -45,7 +45,7 @@ public class SkadeRepo {
 
     //mangler hvilken bil det er.
     public void submitTotalPrice() {
-        String updateBilStatusSql = "UPDATE Bil SET status = 'ledig'";
+        String updateBilStatusSql = "UPDATE Bil SET status = 'Ledig'";
         jdbcTemplate.update(updateBilStatusSql);
     }
 }
