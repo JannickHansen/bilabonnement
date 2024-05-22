@@ -14,29 +14,45 @@
     <button class="logud-knap">Log ud</button>
 </header>
 
-<table id>
-    <thead>
-    <tr>
-        <th>Skade</th>
-        <th>Pris</th>
-        <a class="back_button" th:href="@{'/skade'}">Tilbage</a>
-        <a class="wish_Button" href="#popup2">Tilføj skade</a>
-        <div id="popup2" class="overlay">
-            <div class="popup-container">
-                <h2>Indtast oplysninger</h2>
-                <a class="close" href="#">Luk vindue</a>
-                <div class="input_box">
-                    <form th:action="@{'/addSkade/' + ${lejeaftale}}">
-                        <input type="text" name="Skade" placeholder="Skade" class="newList_label">
-                        <input type="text" name="Skade_Pris" placeholder="Pris" class="newList_label">
-                        <input type="submit" value="Tilføj" class="small-button">
-                        <button class="small-button" type="submit">Tiløj skade</button>
+<div th:if="${skadeList != null}">
+    <table id="skadeTable">
+        <thead>
+        <tr>
+            <th>Skade</th>
+            <th>Pris</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="skade : ${skadeList}">
+            <td th:text="${skade.skade}"></td>
+            <td th:text="${skade.skadePris}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
-                    </form>
-                </div>
-            </div>
-        </div>
+<!-- tilføj skade  -->
+<form th:action="@{/addSkade}" method="post">
+    <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+    <input type="text" name="skade" placeholder="Skade" required>
+    <input type="number" name="skadePris" placeholder="Pris" required>
+    <button type="submit">Tilføj Skade</button>
+</form>
 
+
+<div>Total Price: <span th:text="${totalPris}"></span></div>
+
+
+<form th:action="@{/submitTotalPrice}" method="post">
+    <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+    <!-- Iterate over skadeList and add skade and skadePris as hidden inputs -->
+    <div th:each="skade : ${skadeList}">
+        <input type="hidden" name="skadeList[0].skade" th:value="${skade.skade}">
+        <input type="hidden" name="skadeList[0].skadePris" th:value="${skade.skadePris}">
+        <input type="hidden" name="skadeList[0].skadeId" th:value="${skade.skadeId}">
+    </div>
+    <input type="submit" value="Submit Total Price">
+</form>
 
 </body>
 </html>

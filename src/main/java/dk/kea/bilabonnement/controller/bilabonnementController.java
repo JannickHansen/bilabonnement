@@ -3,21 +3,22 @@ package dk.kea.bilabonnement.controller;
 import dk.kea.bilabonnement.model.BilModel;
 import dk.kea.bilabonnement.model.Bruger;
 import dk.kea.bilabonnement.model.Lejeaftale;
+import dk.kea.bilabonnement.model.Skaderapport;
 import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.repository.LejeaftaleRepo;
+import dk.kea.bilabonnement.repository.SkadeRepo;
 import dk.kea.bilabonnement.service.BilService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
+import dk.kea.bilabonnement.service.SkadeService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -31,6 +32,9 @@ public class bilabonnementController {
     @Autowired
     LejeaftaleRepo lejeaftaleRepo;
 
+    @Autowired
+    SkadeRepo skadeRepo;
+
 
     @GetMapping("/")
     public String forside() {
@@ -38,14 +42,14 @@ public class bilabonnementController {
     }
 
     @PostMapping("/")
-        public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
-            Bruger bruger = brugerRepo.getBruger(login, password);
+    public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
+        Bruger bruger = brugerRepo.getBruger(login, password);
         if (bruger == null) {
             return "redirect:/";
 
         } else {
             BrugerService brugerService = new BrugerService();
-              brugerService.gemBruger(request, bruger);
+            brugerService.gemBruger(request, bruger);
             return switch (bruger.getRole()) {
                 case "Administrator" -> "redirect:/Administrator";
                 case "Dataregistrer" -> "redirect:/registrer";
@@ -56,6 +60,7 @@ public class bilabonnementController {
 
         }
     }
+
     @GetMapping("/OpretBil")
     public String opretBil() {
         return "OpretBil";
@@ -103,7 +108,7 @@ public class bilabonnementController {
         }
 
         /* Hvis en fejl findes, indsættes teksten i modellen, og dette sendes til opretbilfejl siden. */
-        model.addAttribute("errorText",errorText);
+        model.addAttribute("errorText", errorText);
         if (errorText != null) {
             return "OpretBilFejl";
         }
@@ -121,19 +126,23 @@ public class bilabonnementController {
     }
 
     @GetMapping("/Administrator")
-    public String admin(){return "Admin";}
+    public String admin() {
+        return "Admin";
+    }
 
     @GetMapping("/manageFleet")
     public String manageFleet(Model model) {
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
-        return "manageFleet"; }
+        return "manageFleet";
+    }
 
     @GetMapping("/FjernBil")
     public String fjernBil(Model model) {
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
-        return "FjernBil"; }
+        return "FjernBil";
+    }
 
     @PostMapping("/FjernBil")
     public String bilFjernes(@RequestParam("chassisNumber") String chassisNumber, Model model) {
@@ -142,16 +151,27 @@ public class bilabonnementController {
         model.addAttribute("fleetList", fleetList);
         return "FjernBil";
     }
-  
+
     @GetMapping("/Forretningsudvikler")
-    public String forretningudv(){return "Forretningsudvikler";}
+    public String forretningudv() {
+        return "Forretningsudvikler";
+    }
+
     @GetMapping("/registrer")
-    public String registrer(){return "register";}
+    public String registrer() {
+        return "register";
+    }
+
     @GetMapping("/skade")
-    public String skade(){return "skade";}
+    public String skade() {
+        return "skade";
+    }
 
     @GetMapping("/OpretBruger")
-    public String opretBruger(){return "OpretBruger";}
+    public String opretBruger() {
+        return "OpretBruger";
+    }
+
     @PostMapping("/OpretBruger")
     public String nyBruger(
             @RequestParam("login") String login,
@@ -165,7 +185,9 @@ public class bilabonnementController {
     }
 
     @GetMapping("/NyLejeaftale")
-    public String opretLejeaftale(){return "NyLejeaftale";}
+    public String opretLejeaftale() {
+        return "NyLejeaftale";
+    }
 
 
     @GetMapping("/vaelglejeaftale")
@@ -174,10 +196,44 @@ public class bilabonnementController {
         model.addAttribute("Lejeaftale", lejeaftaler);
         return "vaelglejeaftale";
     }
-    @GetMapping("/tilbagelevering/{Lejeaftale_id}")
-    public String showTilbagelevering(@PathVariable("Lejeaftale_id") int lejeaftale_id, Model model){
 
+
+    @Autowired
+    private SkadeService skadeService;
+
+    private List<Skaderapport> temporarySkadeList = new ArrayList<>();
+
+    @GetMapping("/tilbagelevering")
+    public String showTilbageleveringForm(@RequestParam("chassisNumber") String chassisNumber, Model model) {
+        model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("skadeList", temporarySkadeList);
         return "tilbagelevering";
+    }
+
+    @PostMapping("/addSkade")
+    public String addSkade(@ModelAttribute Skaderapport skadeRapport) {
+        temporarySkadeList.add(skadeRapport);
+        return "redirect:/tilbagelevering?chassisNumber=" + skadeRapport.getChassisNumber();
+    }
+
+
+    @PostMapping("/submitTotalPrice")
+    public String submitTotalPrice(@RequestParam("chassisNumber") String chassisNumber, @ModelAttribute List<Skaderapport> skadeList) {
+        skadeService.createSkadeRapport(chassisNumber, skadeList);
+        // Clear the temporarySkadeList after persisting to the database
+        temporarySkadeList.clear();
+        return "redirect:/tilbagelevering?chassisNumber=" + chassisNumber;
+    }
+}
+    /*
+     @PostMapping("/submitTotalPrice")
+    public String submitTotalPrice(@RequestParam("chassisNumber") String chassisNumber, Skaderapport[] skadeList) {
+        // Create SkadeRapport and change Bil status to "ledig"
+        skadeService.createSkadeRapport(chassisNumber, Arrays.asList(skadeList));
+        // Redirect to the same page after processing
+        return "redirect:/tilbagelevering?chassisNumber=" + chassisNumber;
     }
 }
 
+
+*/
