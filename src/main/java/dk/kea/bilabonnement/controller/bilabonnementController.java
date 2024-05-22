@@ -144,6 +144,9 @@ public class bilabonnementController {
 
     @GetMapping("/help")
     public String helper(){return "help";}
+
+    @GetMapping("/Cookies")
+    public String cookie(){return "Cookies";}
   
     @GetMapping("/Forretningsudvikler")
     public String forretningudv(){return "Forretningsudvikler";}
