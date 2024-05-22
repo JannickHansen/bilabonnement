@@ -182,6 +182,7 @@ public class bilabonnementController {
             return "redirect:/";
         }
         // Valider adgang slut
+
         bilRepo.deleteChassisNumber(chassisNumber);
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
@@ -202,7 +203,7 @@ public class bilabonnementController {
         return "register";}
     @GetMapping("/skade")
     public String skade(){
-        if (!brugerService.isData(request)){
+        if (!brugerService.isSkade(request)){
             return "redirect:/";
         }
         return "skade";}
