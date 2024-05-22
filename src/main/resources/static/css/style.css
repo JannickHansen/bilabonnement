@@ -56,6 +56,17 @@ body {
     background-color: #126584;
 
 }
+
+
+.small-button2 {
+    width: 100%;
+    padding: 10px;
+    background-color: #1893C3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
 .pictureLogo {
     padding: 10px 20px;
     background-color: white;
@@ -119,6 +130,7 @@ body {
 .footer-left {
     text-align: left;
     text-decoration: none;
+    color: black;
 }
 
 .footer-center {
