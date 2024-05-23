@@ -10,7 +10,7 @@
 
 <header class="header2">
     <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
-    <button class="logud-knap">Log ud</button>
+    <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
 </header>
 
 <div class="button-container">
@@ -30,6 +30,12 @@
         </div>
     </div>
 </div>
+
+
+<div class="button-container">
+    <button class="tilbageButton" onclick="window.location.href='/registrer'">Tilbage</button>
+</div>
+
 
 </body>
 </html>

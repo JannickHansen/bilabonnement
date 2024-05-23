@@ -11,12 +11,12 @@
 <header class="header2">
     <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
 
-    <button class="logud-knap">Log ud</button>
+    <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
 </header>
 
 
 <div class="box-container">
-    <button onclick="location.href='/NyLejeaftale'" class="containerbtn">Opret lejeaftale <br>
+    <button onclick="location.href='/LejeAftale'" class="containerbtn">Lejeaftaler <br>
         <img src="../static/img/registerlejeaftale.jpg" width="100px" height="100px" th:src="@{/img/registerlejeaftale.jpg}" class="containerimg">
     </button>
     <button onclick="location.href='/manageFleet'" class="containerbtn">Manage fleet <br>

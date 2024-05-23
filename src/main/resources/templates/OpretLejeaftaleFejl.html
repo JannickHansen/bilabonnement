@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret Bil</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
+
+</header>
+
+
+
+<div class="opretBil-container">
+    <h2>Opret Ny Lejeaftale</h2>
+    <form class="opretBil-form" action="/OpretLejeaftaleFejl" method="post">
+
+        <label for="chassisNumber">Stelnummer:</label>
+        <input type="text" id="chassisNumber" name="chassisNumber" placeholder="Stelnummer" required th:value="${chassisNumber}">
+
+        <label for="dato">Dato (DD-MM-YYYY):</label>
+        <input type="text" id="dato" name="dato" placeholder="dd-MM-yyyy" pattern="\d{2}-\d{2}-\d{4}" required th:value="${datotemp}">
+
+        <label for="Udlejnings_Type">Udlejnings Type:</label>
+        <select class="opretBil-dropdown" id="Udlejnings_Type" name="Udlejnings_Type" required>
+            <option value="" disabled selected>Vælg Type</option>
+            <option value="Limited" th:selected="${Udlejnings_Type == 'Limited'}">Limited (5mdr)</option>
+            <option value="Unlimited" th:selected="${Udlejnings_Type == 'Unlimited'}">Unlimited (3-36mdr)</option>
+        </select>
+
+        <label for="Afhentningstidspunkt">Afhentningstidspunkt:</label>
+        <input type="text" id="Afhentningstidspunkt" name="Afhentningstidspunkt" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" required th:value="${Afhentningstidspunkt}">
+
+        <label for="Afhentningssted">Afhentningssted:</label>
+        <input type="text" id="Afhentningssted" name="Afhentningssted" placeholder="Afhentningssted" required th:value="${Afhentningssted}">
+
+        <input type="hidden" id="Medarbejder_id" name="Medarbejder_id" value="2" required th:value="${Medarbejder_id}">
+
+        <label for="Kunde_Navn">Kunde Navn</label>
+        <input type="text" id="Kunde_Navn" name="Kunde_Navn" required th:value="${Kunde_Navn}">
+
+        <label for="Telefon_nummer">Telefon Nummer</label>
+        <input type="number" id="Telefon_nummer" name="Telefon_nummer" required pattern="\d{8}"
+               th:value="${Telefon_nummer}" title="Indtast venligst et 8 cifret telefon nummer. +45 skal ikke tilføjes."/>
+
+        <label for="Email">Email</label>
+        <input type="text" id=Email name="Email" required th:value="${Email}">
+
+        <label for="Adresse">Adresse</label>
+        <input type="text" id="Adresse" name="Adresse" required th:value="${Adresse}">
+
+        <div class="error-text">
+            <span th:text="${errorText}"></span>
+        </div>
+
+        <button class="small-button" type="submit">Opret</button>
+
+    </form>
+</div>
+<div class="button-container">
+    <button class="opretBilButton" onclick="window.location.href='/LejeAftale'">Tilbage</button>
+</div>
+</body>
+</html>

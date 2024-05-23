@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Fleet</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
+</header>
+
+<div class="button-container">
+    <button class="opretBilButton" onclick="window.location.href='/OpretLejeaftale'">Opret Lejeaftale</button>
+</div>
+<div class="manageWrapper">
+    <div class="lejeaftaleVent-container">
+        <h2>Lejeaftaler Afventende Bekræftning</h2>
+        <div th:each="lejeaftale, index : ${lejeaftaleList}" class="lejeaftalebox">
+            <h3><span>Kunde ID:</span> <span th:text="${lejeaftale.Lejeaftale_id} + ' (' + ${datoliste[index.index]} + ')'"></span></h3>
+            <p><strong>Stelnummer:</strong> <span th:text="${lejeaftale.chassisNumber}"></span></p>
+            <p><strong>Nummerplade:</strong> <span th:text="${lejeaftale.licensePlate}"></span></p>
+            <p><strong>Kunde ID:</strong> <span th:text="${lejeaftale.kunde_id}"></span></p>
+            <p><strong>Udlejningstype:</strong> <span th:text="${lejeaftale.udlejnings_Type}"></span></p>
+            <p><strong>Afhentningssted:</strong> <span th:text="${lejeaftale.afhentningssted}"></span></p>
+            <p><strong>Afhentningstidspunkt:</strong> <span th:text="${lejeaftale.afhentningstidspunkt}"></span></p>
+            <p><strong>Status:</strong> <span th:text="${lejeaftale.status}"></span></p>
+        </div>
+    </div>
+</div>
+
+<div class="button-container">
+    <button class="tilbageButton" onclick="window.location.href='/registrer'">Tilbage</button>
+</div>
+</body>
+</html>

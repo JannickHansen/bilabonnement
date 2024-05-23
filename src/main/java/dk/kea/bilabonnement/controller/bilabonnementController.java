@@ -8,18 +8,27 @@ import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import dk.kea.bilabonnement.repository.SkadeRepo;
 import dk.kea.bilabonnement.service.BilService;
+import dk.kea.bilabonnement.service.ValidationService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
 import dk.kea.bilabonnement.service.SkadeService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class bilabonnementController {
@@ -31,6 +40,12 @@ public class bilabonnementController {
 
     @Autowired
     LejeaftaleRepo lejeaftaleRepo;
+    @Autowired
+    HttpServletRequest request;
+    @Autowired
+    BrugerService brugerService;
+    @Autowired
+    ValidationService validationService;
 
     @Autowired
     SkadeRepo skadeRepo;
@@ -38,12 +53,21 @@ public class bilabonnementController {
 
     @GetMapping("/")
     public String forside() {
+
+        if (Objects.equals(request.getParameter("logud"), "1")){
+            request.getSession().invalidate();
+        }
         return "BilabonnementForside";
     }
 
     @PostMapping("/")
+
     public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
         Bruger bruger = brugerRepo.getBruger(login, password);
+
+        public String login(@RequestParam String login, @RequestParam String password) {
+            Bruger bruger = brugerRepo.getBruger(login, password);
+
         if (bruger == null) {
             return "redirect:/";
 
@@ -63,6 +87,11 @@ public class bilabonnementController {
 
     @GetMapping("/OpretBil")
     public String opretBil() {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
         return "OpretBil";
     }
 
@@ -77,8 +106,13 @@ public class bilabonnementController {
                               @RequestParam("fuel") String fuel,
                               Model model
     ) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
 
-        BilService validation = new BilService();
+        ValidationService validation = new ValidationService();
 
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
@@ -122,16 +156,35 @@ public class bilabonnementController {
 
     @GetMapping("/OpretBilFejl")
     public String opretBilFejl() {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
         return "OpretBilFejl";
     }
 
     @GetMapping("/Administrator")
+
     public String admin() {
         return "Admin";
     }
 
+    public String admin(){
+        if (brugerService.isAdmin(request)){
+            return "Admin";
+        }
+        return "redirect:/";
+        }
+
+
     @GetMapping("/manageFleet")
     public String manageFleet(Model model) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
         return "manageFleet";
@@ -139,6 +192,12 @@ public class bilabonnementController {
 
     @GetMapping("/FjernBil")
     public String fjernBil(Model model) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
+
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
         return "FjernBil";
@@ -146,11 +205,18 @@ public class bilabonnementController {
 
     @PostMapping("/FjernBil")
     public String bilFjernes(@RequestParam("chassisNumber") String chassisNumber, Model model) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
+
         bilRepo.deleteChassisNumber(chassisNumber);
         List<BilModel> fleetList = bilRepo.loadAllCars();
         model.addAttribute("fleetList", fleetList);
         return "FjernBil";
     }
+
 
     @GetMapping("/Forretningsudvikler")
     public String forretningudv() {
@@ -172,6 +238,40 @@ public class bilabonnementController {
         return "OpretBruger";
     }
 
+
+    @GetMapping("/help")
+    public String helper(){return "help";}
+
+    @GetMapping("/Cookies")
+    public String cookie(){return "Cookies";}
+  
+    @GetMapping("/Forretningsudvikler")
+    public String forretningudv(){
+        if (!brugerService.isUdvikler(request)){
+            return "redirect:/";
+        }
+        return "Forretningsudvikler";}
+    @GetMapping("/registrer")
+    public String registrer(){
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        return "register";}
+    @GetMapping("/skade")
+    public String skade(){
+        if (!brugerService.isSkade(request)){
+            return "redirect:/";
+        }
+        return "skade";}
+
+    @GetMapping("/OpretBruger")
+    public String opretBruger(){
+        if (!brugerService.isAdmin(request)){
+            return "redirect:/";
+        }
+        return "OpretBruger";
+    }
+
     @PostMapping("/OpretBruger")
     public String nyBruger(
             @RequestParam("login") String login,
@@ -179,23 +279,131 @@ public class bilabonnementController {
             @RequestParam("role") String role
 
     ) {
+        // Valider adgang start
+        if (!brugerService.isAdmin(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
+
         Bruger bruger = new Bruger(login, password, role);
         brugerRepo.create(bruger);
         return "redirect:/Administrator";
     }
 
+
     @GetMapping("/NyLejeaftale")
     public String opretLejeaftale() {
         return "NyLejeaftale";
+
+    @GetMapping("/LejeAftale")
+    public String lejeaftale(Model model) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
+        List<Lejeaftale> lejeaftaleList = lejeaftaleRepo.findAllAfventende();
+        model.addAttribute("datoliste",validationService.datoFormatteringTilVisning(lejeaftaleList));
+        model.addAttribute("lejeaftaleList", lejeaftaleList);
+        return "/LejeAftale";
+    }
+
+    @PostMapping("/OpretLejeaftaleFejl")
+    public String opretLejeaftale(@RequestParam("chassisNumber") String chassisNumber,
+                                  @RequestParam("dato")
+                                    @DateTimeFormat(pattern = "dd-MM-yyyy") String datotemp,
+                                  @RequestParam("Udlejnings_Type") String Udlejnings_Type,
+                                  @RequestParam("Afhentningstidspunkt") String Afhentningstidspunkt,
+                                  @RequestParam("Afhentningssted") String Afhentningssted,
+                                  @RequestParam("Medarbejder_id") int Medarbejder_id,
+                                  @RequestParam("Kunde_Navn") String Kunde_Navn,
+                                  @RequestParam("Telefon_nummer") int Telefon_nummer,
+                                  @RequestParam("Email") String Email,
+                                  @RequestParam("Adresse") String Adresse,
+                                  Model model){
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+
+        ValidationService validation = new ValidationService();
+        String errorText = null;
+
+        LocalTime afhentningstidspunkttemp2 = LocalTime.parse(Afhentningstidspunkt, DateTimeFormatter.ofPattern("HH:mm"));
+        Time Afhentningstidspunkttemp = Time.valueOf(afhentningstidspunkttemp2);
+
+        model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("Udlejnings_Type", Udlejnings_Type);
+        model.addAttribute("Afhentningssted", Afhentningssted);
+        model.addAttribute("Medarbejder_id", Medarbejder_id);
+        model.addAttribute("Kunde_Navn", Kunde_Navn);
+        model.addAttribute("Telefon_nummer", Telefon_nummer);
+        model.addAttribute("Email", Email);
+        model.addAttribute("Adresse", Adresse);
+        model.addAttribute("Afhentningstidspunkt", Afhentningstidspunkt);
+        model.addAttribute("datotemp", datotemp);
+
+        if (!validation.validateDato(datotemp)) {
+            errorText = "Ugyldig Dato. Dato må tidligst være i dag.";
+            model.addAttribute("errorText",errorText);
+            return "OpretLejeaftaleFejl";
+        }
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate datoLocalDate = LocalDate.parse(datotemp, dateFormatter);
+        Date dato = Date.valueOf(datoLocalDate);
+        model.addAttribute("dato", dato);
+
+        int Kunde_id = lejeaftaleRepo.customerCheck(Kunde_Navn, Telefon_nummer, Email, Adresse);
+        model.addAttribute("Kunde_id", Kunde_id);
+
+        if (lejeaftaleRepo.findChassisNumberInDatabase(chassisNumber).isEmpty()) {
+            errorText = "Stelnummer findes ikke i databasen.";
+        } else if (!validation.validateDato(dato)) {
+            errorText = "Ugyldig Dato. Dato må tidligst være i dag.";
+            model.addAttribute("datotemp", datotemp);
+        } else if (!validation.validateTime(Afhentningstidspunkttemp)) {
+            errorText = "Vælg venligst et tidspunkt i fremtiden.";
+        }
+
+        model.addAttribute("errorText",errorText);
+        if (errorText != null) {
+            return "OpretLejeaftaleFejl";
+        }
+
+        //to make it work - find out how to do cookies // check what employee is logged in /w kevin
+        Medarbejder_id = 2;
+
+        String licensePlate = lejeaftaleRepo.findLicensePlate(chassisNumber);
+        model.addAttribute(licensePlate);
+        String status = "Afventende";
+        Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Medarbejder_id, Kunde_id, licensePlate, status);
+        lejeaftaleRepo.create(nyLejeaftale);
+        return "/LejeAftale";
+    }
+
+    @GetMapping("/OpretLejeaftale")
+    public String opretLejeaftaleFejl(Model model) {
+        // Valider adgang start
+        if (!brugerService.isData(request)){
+            return "redirect:/";
+        }
+        // Valider adgang slut
+
+        return "OpretLejeaftale";
+
     }
 
 
     @GetMapping("/vaelglejeaftale")
     public String showVaelglejeaftale(Model model) {
+        if (!brugerService.isSkade(request)){
+            return "redirect:/";
+        }
         List<Lejeaftale> lejeaftaler = lejeaftaleRepo.findAll();
         model.addAttribute("Lejeaftale", lejeaftaler);
         return "vaelglejeaftale";
     }
+
 
 
     @Autowired
@@ -215,6 +423,13 @@ public class bilabonnementController {
         // Totalpris udregnes gennem metoden i SkadeService klassen
         double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
         model.addAttribute("totalPris", totalPris);
+
+    @GetMapping("/tilbagelevering/{Lejeaftale_id}")
+    public String showTilbagelevering(@PathVariable("Lejeaftale_id") int lejeaftale_id, Model model){
+        if (!brugerService.isSkade(request)){
+            return "redirect:/";
+        }
+
         return "tilbagelevering";
     }
 
