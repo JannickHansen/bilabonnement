@@ -1,6 +1,8 @@
 package dk.kea.bilabonnement.model;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class Lejeaftale {
@@ -9,15 +11,16 @@ public class Lejeaftale {
     private String chassisNumber;
     private Date dato;
     private String Udlejnings_Type;
-    private Date Afhentningstidspunkt;
+    private Time Afhentningstidspunkt;
     private String Afhentningssted;
     private int Medarbejder_id;
     private int Kunde_id;
+    private String status;
 
     public Lejeaftale() {
     }
 
-    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id) {
+    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id) {
         Lejeaftale_id = lejeaftale_id;
         this.chassisNumber = chassisNumber;
         this.dato = dato;
@@ -27,7 +30,7 @@ public class Lejeaftale {
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
     }
-    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate) {
+    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate) {
         Lejeaftale_id = lejeaftale_id;
         this.chassisNumber = chassisNumber;
         this.dato = dato;
@@ -37,6 +40,17 @@ public class Lejeaftale {
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
         this.licensePlate = licensePlate;
+    }
+    public Lejeaftale(String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate, String status) {
+        this.chassisNumber = chassisNumber;
+        this.dato = dato;
+        Udlejnings_Type = udlejnings_Type;
+        Afhentningstidspunkt = afhentningstidspunkt;
+        Afhentningssted = afhentningssted;
+        Medarbejder_id = medarbejder_id;
+        Kunde_id = kunde_id;
+        this.licensePlate = licensePlate;
+        this.status = status;
     }
 
     public int getLejeaftale_id() {
@@ -71,11 +85,11 @@ public class Lejeaftale {
         Udlejnings_Type = udlejnings_Type;
     }
 
-    public Date getAfhentningstidspunkt() {
+    public Time getAfhentningstidspunkt() {
         return Afhentningstidspunkt;
     }
 
-    public void setAfhentningstidspunkt(Date afhentningstidspunkt) {
+    public void setAfhentningstidspunkt(Time afhentningstidspunkt) {
         Afhentningstidspunkt = afhentningstidspunkt;
     }
 
@@ -110,5 +124,8 @@ public class Lejeaftale {
     public String getLicensePlate () {
         return this.licensePlate;
     }
+
+    public String getStatus() {return this.status;}
+    public void setStatus(String status) {this.status = status;}
 
 }

@@ -136,6 +136,16 @@ body {
     color: black;
 }
 
+.opretBil-form input,
+.opretBil-form select {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 .opretBil-form input[type="text"] {
     width: 100%;
     padding: 10px;
@@ -182,6 +192,10 @@ body {
     padding: 10px;
     background-color: white;
     color: black;
+}
+
+.opretBil-form input[type="time"] {
+    width: 50%;
 }
 .error-text {
     color: red;
@@ -446,3 +460,47 @@ body {
     background-color: #043648;
 }
 
+.lejeaftaleVent-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    margin: 10px 0.01%;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.lejeaftaleVent-container h2 {
+    grid-column: span 4;
+    text-align: center;
+    color: black;
+    background-color: white;
+}
+
+.lejeaftalebox {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+}
+
+.lejeaftalebox p {
+    margin: 10px 0;
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+}
+
+.lejeaftalebox p strong {
+    width: 150px;
+    text-align: left;
+    margin-right: 23px;
+}
+
+.lejeaftalebox p span {
+    flex: 1;
+    text-align: left;
+}
