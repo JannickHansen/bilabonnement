@@ -37,9 +37,6 @@ public class Lejeaftale {
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
     }
-
-    public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Date afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate, String brand, String carModel) {
-
     public Lejeaftale(int lejeaftale_id, String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate) {
 
         Lejeaftale_id = lejeaftale_id;

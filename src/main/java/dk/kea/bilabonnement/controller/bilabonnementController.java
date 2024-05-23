@@ -7,7 +7,6 @@ import dk.kea.bilabonnement.model.Skaderapport;
 import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import dk.kea.bilabonnement.repository.SkadeRepo;
-import dk.kea.bilabonnement.service.BilService;
 import dk.kea.bilabonnement.service.ValidationService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
@@ -61,10 +60,6 @@ public class bilabonnementController {
     }
 
     @PostMapping("/")
-
-    public String login(HttpServletRequest request, @RequestParam String login, @RequestParam String password) {
-        Bruger bruger = brugerRepo.getBruger(login, password);
-
         public String login(@RequestParam String login, @RequestParam String password) {
             Bruger bruger = brugerRepo.getBruger(login, password);
 
@@ -166,9 +161,6 @@ public class bilabonnementController {
 
     @GetMapping("/Administrator")
 
-    public String admin() {
-        return "Admin";
-    }
 
     public String admin(){
         if (brugerService.isAdmin(request)){
@@ -216,28 +208,6 @@ public class bilabonnementController {
         model.addAttribute("fleetList", fleetList);
         return "FjernBil";
     }
-
-
-    @GetMapping("/Forretningsudvikler")
-    public String forretningudv() {
-        return "Forretningsudvikler";
-    }
-
-    @GetMapping("/registrer")
-    public String registrer() {
-        return "register";
-    }
-
-    @GetMapping("/skade")
-    public String skade() {
-        return "skade";
-    }
-
-    @GetMapping("/OpretBruger")
-    public String opretBruger() {
-        return "OpretBruger";
-    }
-
 
     @GetMapping("/help")
     public String helper(){return "help";}
@@ -290,10 +260,6 @@ public class bilabonnementController {
         return "redirect:/Administrator";
     }
 
-
-    @GetMapping("/NyLejeaftale")
-    public String opretLejeaftale() {
-        return "NyLejeaftale";
 
     @GetMapping("/LejeAftale")
     public String lejeaftale(Model model) {
@@ -423,13 +389,6 @@ public class bilabonnementController {
         // Totalpris udregnes gennem metoden i SkadeService klassen
         double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
         model.addAttribute("totalPris", totalPris);
-
-    @GetMapping("/tilbagelevering/{Lejeaftale_id}")
-    public String showTilbagelevering(@PathVariable("Lejeaftale_id") int lejeaftale_id, Model model){
-        if (!brugerService.isSkade(request)){
-            return "redirect:/";
-        }
-
         return "tilbagelevering";
     }
 
