@@ -90,8 +90,12 @@ public class LejeaftaleRepo {
     }
 
     public List<Lejeaftale> findAllAfventende(){
-        String sql = "SELECT lejeaftale.*, bil.licensePlate FROM lejeaftale, bil WHERE lejeaftale.chassisNumber = bil.chassisNumber AND lejeaftale.status = 'afventende'";
+        String sql = "SELECT lejeaftale.*, bil.LicensePlate FROM lejeaftale, bil WHERE lejeaftale.chassisNumber = bil.chassisNumber AND lejeaftale.status = 'Afventende'";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
+    }
+    public void statusUpdate(String status, int lejeaftale_id){
+        final String UPDATE_STATUS_BY_LEJEAFTALE_SQL = "UPDATE lejeaftale SET status = ? WHERE lejeaftale_id = ?";
+        jdbcTemplate.update(UPDATE_STATUS_BY_LEJEAFTALE_SQL, status, lejeaftale_id);
     }
 }

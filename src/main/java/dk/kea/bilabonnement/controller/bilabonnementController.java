@@ -52,7 +52,6 @@ public class bilabonnementController {
 
     @GetMapping("/")
     public String forside() {
-
         if (Objects.equals(request.getParameter("logud"), "1")){
             request.getSession().invalidate();
         }
