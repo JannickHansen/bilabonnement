@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+
+    <button class="logud-knap">Log ud</button>
+</header>
+<div class="button-container">
+    <button class="opretBilButton" onclick="window.location.href='/clearTemporarySkadeList'">Tilbage</button>
+</div>
+
+<div class="skaderapport-container">
+<div class="bilinfo-box">
+    <h1>Skaderapport</h1>
+
+    <h2>Lejeaftale nr: <span th:text="${lejeaftale}"></span><br><br>
+        <span th:text="${brand}"></span>  <span th:text="${carmodel}"></span><br>
+        <span th:text="${licenseplate}"></span><br>
+        Stelnr: <span th:text="${chassisNumber}"></span><br>
+        Medarbejder: <span th:text="${medarbejder}"></span><br>
+        Kunde: <span th:text="${kunde}"></span>
+    </h2>
+
+</div>
+<table class="skaderapport-container" id="skadeTable">
+    <thead>
+    <tr>
+        <th>Skade</th>
+        <th>Pris</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="skaderapport : ${skadeList}">
+        <td th:text="${skaderapport.skade}"></td>
+        <td th:text="${skaderapport.skadePris}+kr"></td>
+    </tr>
+    </tbody>
+</table>
+<br><h2>Sammenlagt pris for skaderapport: <span th:text="${totalPris}+kr."></span></h2>
+<button class="udskriv-button" onclick="window.print()">Udskriv</button>
+</div>
+</body>
+</html>

@@ -175,6 +175,7 @@ body {
     border-radius: 3px;
     cursor: pointer;
 }
+
 .small-button button:hover {
     background-color: #126584;
 }
@@ -413,29 +414,6 @@ body {
 
 
 
-.popup-container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.popup-container button {
-        width: 100%;
-        padding: 10px;
-        background-color: #1893C3;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-}
-.popup-container button:hover{
-    background-color: #126584;
-}
-.popup-container button:active{
-    background-color: #043648;
-}
 
 .overlay {
     position: fixed;
@@ -453,7 +431,7 @@ body {
 }
 .lejeaftalebtn {
     width: 300px;
-    height: 300px;
+    height: 450px;
     background-color: #1893C3;
     color: white;
     border: none;
@@ -469,6 +447,94 @@ body {
 }
 
 .lejeaftalebtn:active {
+    background-color: #043648;
+}
+
+
+
+.skaderapport-container {
+    width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: black;
+}
+.skaderapport-form button {
+    width: 60%;
+    padding: 10px;
+    background-color: #1893C3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.small-button button:hover {
+    background-color: #126584;
+}
+.small-button:active {
+    background-color: #043648;
+}
+.input-box {
+    width: 150px;
+    height: 30px;
+    text-align: center;
+}
+
+#skadeTable {
+    width: 100%;
+}
+#skadeTable th,
+#skadeTable td {
+    text-align: center;
+    font-size: large;
+    vertical-align: middle;
+
+}
+.bilinfo-box{
+    border: 15px solid #246079;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+.fastskade-form button {
+    width: 30%;
+    padding: 10px;
+    background-color: #1893C3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: large;
+    font-weight: bold;
+}
+.fastskade-form button:hover {
+    background-color: #126584;
+}
+.fastskade-form button:active {
+    background-color: #043648;
+}
+
+.udskriv-button button {
+    width: 30%;
+    padding: 10px;
+    background-color: #1893C3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: large;
+    font-weight: bold;
+}
+.udskriv-button button:hover {
+    background-color: #126584;
+}
+.udskriv-button button:active {
     background-color: #043648;
 }
 
@@ -535,3 +601,4 @@ body {
     text-align: center;
     white-space: nowrap;
 }
+

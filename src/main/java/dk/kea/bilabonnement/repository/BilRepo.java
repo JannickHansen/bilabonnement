@@ -113,12 +113,9 @@ public class BilRepo {
     }
 
     // Metode til at vise available cars i en liste fra databasen.
-    public List<BilModel> showAvailableCars(){
+    public List<BilModel> showAvailableCars() {
         String sql = "SELECT * FROM Bil WHERE status = 'ledig'";
         RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
         return jdbcTemplate.query(sql, rowMapper);
-    }
-    public List<BilModel> loadChassisByInput(String input){
-        return loadCars("SELECT * FROM bil WHERE chassisNumber = '"+input+"'");
     }
 }
