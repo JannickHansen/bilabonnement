@@ -204,36 +204,94 @@ public class bilabonnementController {
     private List<Skaderapport> temporarySkadeList = new ArrayList<>();
 
     @PostMapping("/tilbagelevering")
-    public String showTilbageleveringForm(@RequestParam("chassisNumber") String chassisNumber, Model model) {
+    public String showTilbagelevering(@RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, Model model) {
         model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("lejeaftale", lejeaftale);
+        model.addAttribute("brand", brand);
+        model.addAttribute("carmodel", carmodel);
+        model.addAttribute("licenseplate", licenseplate);
         model.addAttribute("skadeList", temporarySkadeList);
+
+        // Totalpris udregnes gennem metoden i SkadeService klassen
+        double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
+        model.addAttribute("totalPris", totalPris);
         return "tilbagelevering";
     }
 
     @PostMapping("/addSkade")
-    public String addSkade(@ModelAttribute Skaderapport skadeRapport, Model model) {
+    public String addSkade(@ModelAttribute Skaderapport skadeRapport, @RequestParam("skade") String skade, @RequestParam ("chassisNumber") String chassisNumber,@RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, Model model) {
+        switch (skade) {
+            case "Ridset alufælg":
+                skadeRapport.setSkade(skade);
+                skadeRapport.setSkadePris(400); // Fast pris for givne skade
+                break;
+            case "Ny forrude":
+                skadeRapport.setSkade(skade);
+                skadeRapport.setSkadePris(3000);
+                break;
+            case "Lakfelt":
+                skadeRapport.setSkade(skade);
+                skadeRapport.setSkadePris(1500);
+                break;
+            default:
+                break;
+        }
         temporarySkadeList.add(skadeRapport);
+        model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("lejeaftale", lejeaftale);
+        model.addAttribute("brand", brand);
+        model.addAttribute("carmodel", carmodel);
+        model.addAttribute("licenseplate", licenseplate);
         model.addAttribute("skadeList", temporarySkadeList);
+
+        double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
+        model.addAttribute("totalPris", totalPris);
         return "/tilbagelevering";
     }
-
-    @PostMapping("/submitTotalPrice")
-    public String submitTotalPrice(@RequestParam("chassisNumber") String chassisNumber, @ModelAttribute List<Skaderapport> skadeList) {
-        skadeService.createSkadeRapport(chassisNumber, skadeList);
-        // Clear the temporarySkadeList after persisting to the database
+    // back button på tilbagelevering.html linker hertil. GetMapping clearer temporarySkadeList og redirecter tilbage til listen af biler til tilbagelevering
+    @GetMapping("/clearTemporarySkadeList")
+    public String clearTemporarySkadeList() {
         temporarySkadeList.clear();
-        return "redirect:/tilbagelevering?chassisNumber=" + chassisNumber;
+        return "redirect:/vaelglejeaftale";
     }
-}
-    /*
-     @PostMapping("/submitTotalPrice")
-    public String submitTotalPrice(@RequestParam("chassisNumber") String chassisNumber, Skaderapport[] skadeList) {
-        // Create SkadeRapport and change Bil status to "ledig"
-        skadeService.createSkadeRapport(chassisNumber, Arrays.asList(skadeList));
-        // Redirect to the same page after processing
-        return "redirect:/tilbagelevering?chassisNumber=" + chassisNumber;
-    }
-}
+
+    @PostMapping("/createSkaderapport")
+    public String createSkaderapport(@RequestParam("totalPris") String totalPris, @RequestParam ("chassisNumber") String chassisNumber,@RequestParam("lejeaftale") int lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate,@RequestParam("medarbejder") int medarbejder, @RequestParam("kunde") int kunde, Model model) {
+        for (Skaderapport skaderapport : temporarySkadeList){
+            skaderapport.setLejeaftaleId(lejeaftale);
+            skaderapport.setMedarbejderId(medarbejder);
+            skaderapport.setKundeId(kunde);
+            skadeService.opretSkade(skaderapport.getSkade(), skaderapport.getLejeaftaleId(), skaderapport.getSkadePris(), skaderapport.getMedarbejderId(), skaderapport.getKundeId());
+        }
+        model.addAttribute("lejeaftale", lejeaftale);
+        model.addAttribute("medarbejder", medarbejder);
+        model.addAttribute("kunde", kunde);
+        model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("brand", brand);
+        model.addAttribute("carmodel", carmodel);
+        model.addAttribute("licenseplate", licenseplate);
+        model.addAttribute("skadeList", temporarySkadeList);
+        model.addAttribute("totalPris", totalPris);
 
 
-*/
+        //temporarySkadeList.clear();
+        return "/skaderapport";
+    }
+
+    @GetMapping("/skaderapport")
+        public String skaderapport(@RequestParam("totalPris") String totalPris, @RequestParam ("chassisNumber") String chassisNumber,@RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate,@RequestParam("medarbejder") int medarbejder, @RequestParam("kunde") int kunde, @RequestParam("skadeliste") List<Skaderapport> skadeList, Model model){
+        model.addAttribute("lejeaftale", lejeaftale);
+        model.addAttribute("medarbejder", medarbejder);
+        model.addAttribute("kunde", kunde);
+        model.addAttribute("chassisNumber", chassisNumber);
+        model.addAttribute("brand", brand);
+        model.addAttribute("carmodel", carmodel);
+        model.addAttribute("licenseplate", licenseplate);
+        model.addAttribute("skadeList", skadeList);
+        model.addAttribute("totalPris", totalPris);
+
+        temporarySkadeList.clear();
+            return "skaderapport";
+        }
+    }
+//husk bilstatus til ledig

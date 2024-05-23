@@ -13,11 +13,18 @@ public class SkadeService {
     @Autowired
     private SkadeRepo skadeRepo;
 
-    public void addSkade(Skaderapport skadeRapport) {
-        skadeRepo.addSkade(skadeRapport);
+    public void opretSkade(String skade, int lejeaftale, double skadePris, int medarbejderId, int kundeId) {
+        Skaderapport skaderapport = new Skaderapport();
+        skaderapport.setSkade(skade);
+        skaderapport.setLejeaftaleId(lejeaftale);
+        skaderapport.setSkadePris(skadePris);
+        skaderapport.setMedarbejderId(medarbejderId);
+        skaderapport.setKundeId(kundeId);
+        skadeRepo.save(skaderapport, lejeaftale);
     }
-
-    public void createSkadeRapport(String chassisNumber, List<Skaderapport> skadeList) {
-        skadeRepo.createSkadeRapport(chassisNumber, skadeList);
+    public double calculateTotalPris(List<Skaderapport> skadeList) {
+        return skadeList.stream()
+                .mapToDouble(Skaderapport::getSkadePris)
+                .sum();
     }
 }

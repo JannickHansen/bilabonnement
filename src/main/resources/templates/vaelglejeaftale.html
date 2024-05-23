@@ -22,7 +22,11 @@
         <form action="/tilbagelevering" method="post">
             <button class="lejeaftalebtn" onclick="location.href='/tilbagelevering'">
                 <input type="hidden" name="chassisNumber" th:value="${Lejeaftale.chassisNumber}">
-                Lejeaftale ID: <span th:text="${Lejeaftale.Lejeaftale_id}"></span><br>
+                <input type="hidden" name="lejeaftale" th:value="${Lejeaftale.Lejeaftale_id}">
+                <input type="hidden" name="licenseplate" th:value="${Lejeaftale.licensePlate}">
+                <input type="hidden" name="brand" th:value="${Lejeaftale.brand}">
+                <input type="hidden" name="carmodel" th:value="${Lejeaftale.carModel}">
+                Lejeaftale nr: <span th:text="${Lejeaftale.Lejeaftale_id}"></span><br>
                 <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="containerimg">
                 <br>
                 <span th:text="${Lejeaftale.brand}"></span>  <span th:text="${Lejeaftale.carModel}"></span>

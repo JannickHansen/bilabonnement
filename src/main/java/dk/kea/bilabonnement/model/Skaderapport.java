@@ -2,11 +2,11 @@ package dk.kea.bilabonnement.model;
 
 public class Skaderapport {
     private int skadeId;
+    private int lejeaftaleId;
     private String skade;
     private double skadePris;
     private int medarbejderId;
     private int kundeId;
-
     public String getChassisNumber() {
         return chassisNumber;
     }
@@ -74,5 +74,13 @@ public class Skaderapport {
 
     public void setKundeId(int kundeId) {
         this.kundeId = kundeId;
+    }
+
+    public int getLejeaftaleId() {
+        return lejeaftaleId;
+    }
+
+    public void setLejeaftaleId(int lejeaftaleId) {
+        this.lejeaftaleId = lejeaftaleId;
     }
 }
