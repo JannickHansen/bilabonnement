@@ -119,8 +119,8 @@ public class LejeaftaleRepo {
     public List<Lejeaftale> lejeaftalePeriodeFind() {
         String sql = "SELECT Udlejnings_Type, chassisNumber FROM lejeaftale WHERE chassisNumber = :chassisNumber";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
-        return  jdbcTemplate.query(sql, rowMapper);
-
+        return jdbcTemplate.query(sql, rowMapper);
+    }
     public void statusUpdate(String status, int lejeaftale_id){
         final String UPDATE_STATUS_BY_LEJEAFTALE_SQL = "UPDATE lejeaftale SET status = ? WHERE lejeaftale_id = ?";
         jdbcTemplate.update(UPDATE_STATUS_BY_LEJEAFTALE_SQL, status, lejeaftale_id);

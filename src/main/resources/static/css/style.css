@@ -7,11 +7,13 @@ body {
 
 
 }
+
 .wrapperforside {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 .header2 {
     display: flex;
     align-items: center;
@@ -119,34 +121,43 @@ body {
 }
 .footer-container {
     display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    padding: 20px 30px;
-    text-decoration: none;
+    padding: 10px 30px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    box-sizing: border-box;
+    overflow: hidden;
 
-}
-
-.footer-left, .footer-center, .footer-right {
-    flex: 1;
-    text-align: center;
-    text-decoration: none;
 }
 
 .footer-left {
     text-align: left;
     text-decoration: none;
     color: black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .footer-center {
     text-align: center;
     text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .footer-right {
     text-align: right;
     text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .opretBil-form label {
