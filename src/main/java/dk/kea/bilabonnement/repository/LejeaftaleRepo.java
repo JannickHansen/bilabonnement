@@ -38,7 +38,7 @@ public class LejeaftaleRepo {
         String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
                 "FROM Lejeaftale " +
                 "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
-                "WHERE Bil.status = 'udlejet'";
+                "WHERE Bil.status = 'Udlejet'";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
@@ -47,7 +47,7 @@ public class LejeaftaleRepo {
         String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
                 "FROM Lejeaftale " +
                 "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
-                "WHERE Bil.status = 'afventer'";
+                "WHERE Bil.status = 'Afventende'";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
