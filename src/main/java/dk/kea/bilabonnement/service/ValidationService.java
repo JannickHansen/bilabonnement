@@ -1,13 +1,13 @@
 package dk.kea.bilabonnement.service;
+import dk.kea.bilabonnement.model.BilModel;
 import dk.kea.bilabonnement.model.Lejeaftale;
+import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +15,13 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidationService {
+    public ValidationService() {}
 
     @Autowired
     private LejeaftaleRepo lejeaftaleRepo;
+
+    @Autowired
+    private BilRepo bilRepo;
 
     Pattern patternLetter = Pattern.compile("[^a-zA-Z]");
     Pattern patternLetterNumber = Pattern.compile("[^a-zA-Z0-9]");
@@ -46,13 +50,7 @@ public class ValidationService {
     }
     public boolean validateDato(Date dato) {
         Date today = new Date();
-    return dato.compareTo(today) >= 0;
-    }
-
-    public boolean validateTime(Time tidspunkt) {
-        LocalTime now = LocalTime.now();
-        LocalTime localTidspunkt = tidspunkt.toLocalTime();
-        return !localTidspunkt.isBefore(now);
+    return dato.compareTo(today) >= 1;
     }
 
     public String findLicensePlate(String LicensePlate){
@@ -84,6 +82,16 @@ public class ValidationService {
             }
         }
         return formateredeDatoer;
+    }
+
+    public boolean checkStatusIsLedig(List<BilModel> templist, String chassisNumber) {
+
+        for (BilModel tjekBil : templist) {
+            if (tjekBil.getStatus().equals("Ledig") && chassisNumber.equals(tjekBil.getChassisNumber())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
