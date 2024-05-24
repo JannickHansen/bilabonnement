@@ -13,24 +13,30 @@
 
     <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
 </header>
+<div class="skaderapport-container">
+    <div class="bilinfo-box">
+        <h1>Bil der skal godkendes <br>til afhentning: <br><span th:text="${afventendeBiler.size()}"></span></h1>
+    </div>
+</div>
 
 <div class="box-container">
-    <div th:each="Lejeaftale: ${Lejeaftale}">
-        <form action="/tilbagelevering" method="post">
-            <button class="lejeaftalebtn" onclick="location.href='/tilbagelevering'">
+    <div th:each="Lejeaftale: ${afventendeBiler}">
+        <form action="/bekraeftlejeaftaleAfslut" method="post" onsubmit="return confirm('Er du sikker på, at denne bil er afhentet?');">
+            <button class="lejeaftalebtn">
                 <input type="hidden" name="chassisNumber" th:value="${Lejeaftale.chassisNumber}">
                 <input type="hidden" name="lejeaftale" th:value="${Lejeaftale.Lejeaftale_id}">
                 <input type="hidden" name="licenseplate" th:value="${Lejeaftale.licensePlate}">
                 <input type="hidden" name="brand" th:value="${Lejeaftale.brand}">
                 <input type="hidden" name="carmodel" th:value="${Lejeaftale.carModel}">
                 Lejeaftale nr: <span th:text="${Lejeaftale.Lejeaftale_id}"></span><br>
-                <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/returnkeys.png}" class="containerimg">
+                <img src="../static/img/returnkeys.png" width="100px" height="100px" th:src="@{/img/check-mark-icon.jpg}" class="containerimg">
                 <br>
                 <span th:text="${Lejeaftale.brand}"></span>  <span th:text="${Lejeaftale.carModel}"></span>
-                <br><br>
-                Nummerplade: <span th:text="${Lejeaftale.licensePlate}"></span>
-                <br><br>
-                Stelnr: <span th:text="${Lejeaftale.chassisNumber}"></span>
+                <br>
+                Nummerplade: <span th:text="${Lejeaftale.licensePlate}"></span><br><br>
+                <span th:text="${Lejeaftale.afhentningssted}"></span><br>
+                <span th:text="${Lejeaftale.afhentningstidspunkt}"></span>
+
             </button>
         </form>
     </div>
