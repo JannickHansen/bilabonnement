@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<form class="no-print" th:action="@{/tilbageleveringAfslut}" method="post">
+    <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+    <div class="button-container">
+        <button class="opretBilButton" onclick="window.close()">Luk printvindue</button>
+    </div>
+</form>
+
+<div class="skaderapport-container">
+    <div class="bilinfo-box">
+        <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+        <h1>Skaderapport</h1>
+
+        <h2>Lejeaftale nr: <span th:text="${lejeaftale}"></span><br><br>
+            <span th:text="${brand}"></span>  <span th:text="${carmodel}"></span><br>
+            <span th:text="${licenseplate}"></span><br>
+            Stelnr: <span th:text="${chassisNumber}"></span><br>
+            Medarbejder: <span th:text="${medarbejder}"></span><br>
+            Kunde: <span th:text="${kunde}"></span>
+        </h2>
+
+    </div>
+    <table class="skaderapport-container" id="skadeTable">
+        <thead>
+        <tr>
+            <th>Skade</th>
+            <th>Pris</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="skaderapport : ${skadeList}">
+            <td th:text="${skaderapport.skade}"></td>
+            <td th:text="${skaderapport.skadePris}+kr"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br><h2>Sammenlagt pris for skaderapport: <span th:text="${totalPris}+kr."></span></h2>
+    <form class="skaderapport-form" th:action="@{/udskrivskaderapport}" method="post">
+        <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+        <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
+        <input type="hidden" name="licenseplate" th:value="${licenseplate}">
+        <input type="hidden" name="brand" th:value="${brand}">
+        <input type="hidden" name="carmodel" th:value="${carmodel}">
+        <input type="hidden" name="totalPris" th:value="${totalPris}">
+        <input type="hidden" name="medarbejder" value="1"> <!-- skal rettes -->
+        <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->
+        <button class="small-button no-print" type="submit" onclick="window.print()">Udskriv</button>
+    </form>
+
+</div>
+</body>
+</html>

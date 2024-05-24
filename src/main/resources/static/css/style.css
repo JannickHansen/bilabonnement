@@ -329,7 +329,6 @@ body {
     color: white;
     border: none;
     border-radius: 12px;
-    padding-left: 4%;
     cursor: pointer;
     margin: 0;
     align-content: center;
@@ -412,9 +411,6 @@ body {
     margin-top: 10px;
 }
 
-
-
-
 .overlay {
     position: fixed;
     top: 0;
@@ -449,8 +445,6 @@ body {
 .lejeaftalebtn:active {
     background-color: #043648;
 }
-
-
 
 .skaderapport-container {
     width: 600px;
@@ -488,14 +482,18 @@ body {
 
 #skadeTable {
     width: 100%;
+    border-collapse: collapse;
 }
+
 #skadeTable th,
 #skadeTable td {
     text-align: center;
     font-size: large;
     vertical-align: middle;
-
+    padding: 10px;
+    border: 1px solid #ccc;
 }
+/* Info box */
 .bilinfo-box{
     border: 15px solid #246079;
     padding: 5px;
@@ -589,7 +587,6 @@ body {
     color: white;
     border: none;
     border-radius: 12px;
-    padding-left: 4%;
     cursor: pointer;
     margin: 0;
     align-content: center;

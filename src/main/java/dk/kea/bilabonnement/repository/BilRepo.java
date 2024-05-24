@@ -100,7 +100,7 @@ public class BilRepo {
         return foundCars;
     }
 
-    public void deleteChassisNumber(String chassisNumber){
+    public void deleteChassisNumber(String chassisNumber) {
         final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
         jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
     }
@@ -117,5 +117,9 @@ public class BilRepo {
         String sql = "SELECT * FROM Bil WHERE status = 'ledig'";
         RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
         return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    public List<BilModel> loadWaitingCars() {
+        return loadCars("SELECT * FROM bil WHERE status = 'afventer' ORDER BY status");
     }
 }
