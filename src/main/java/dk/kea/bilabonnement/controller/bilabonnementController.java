@@ -221,6 +221,36 @@ public class bilabonnementController {
             return "redirect:/";
         }
         return "Forretningsudvikler";}
+
+    @GetMapping("/KPIpage")
+    public String KPI() {
+        if (!brugerService.isUdvikler(request)){
+            return "redirect:/";
+        }
+        return "KPIpage";}
+
+    @PostMapping("/handleFormSubmission")
+    public String handleFormSubmission(
+            @RequestParam(name = "bilstatus") String bilstatus,
+            @RequestParam(name = "brand") String brand,
+            @RequestParam(name = "carModel") String carModel,
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "fuel") String fuel,
+            @RequestParam(name = "gnslejeperiode", required = false) String gnslejeperiode,
+            @RequestParam(name = "gnsskadepris", required = false) String gnsskadepris
+    ) {
+        boolean lejeperiode;
+        if (gnslejeperiode != null) {
+            lejeperiode = gnslejeperiode.equals("on");
+        }
+
+        boolean skadepris;
+        if (gnsskadepris != null) {
+            skadepris = gnsskadepris.equals("on");
+        }
+
+        return "redirect:/success-page";
+    }
     @GetMapping("/registrer")
     public String registrer(){
         if (!brugerService.isData(request)){
@@ -325,10 +355,10 @@ public class bilabonnementController {
         if (lejeaftaleRepo.findChassisNumberInDatabase(chassisNumber).isEmpty()) {
             errorText = "Stelnummer findes ikke i databasen.";
         } else if (!validation.validateDato(dato)) {
-            errorText = "Ugyldig Dato. Dato må tidligst være i dag.";
+            errorText = "Ugyldig Dato. Dato må tidligst være 1 dag efter bestilling.";
             model.addAttribute("datotemp", datotemp);
-        } else if (!validation.validateTime(Afhentningstidspunkttemp)) {
-            errorText = "Vælg venligst et tidspunkt i fremtiden.";
+        } else if (!validation.checkStatusIsLedig(bilRepo.loadAllCars(),chassisNumber)) {
+            errorText = "Denne bil er ikke allerede Udlejet.";
         }
 
         model.addAttribute("errorText",errorText);
@@ -342,9 +372,10 @@ public class bilabonnementController {
         String licensePlate = lejeaftaleRepo.findLicensePlate(chassisNumber);
         model.addAttribute(licensePlate);
         String status = "Afventende";
+        bilRepo.changeStatusOnCar(chassisNumber, "Udlejet");
         Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Medarbejder_id, Kunde_id, licensePlate, status);
         lejeaftaleRepo.create(nyLejeaftale);
-        return "/LejeAftale";
+        return "redirect:/LejeAftale";
     }
 
     @GetMapping("/OpretLejeaftale")
@@ -468,4 +499,4 @@ public class bilabonnementController {
             return "skaderapport";
         }
     }
-//husk bilstatus til ledig
+//husk bilstatus til "Ledig"
