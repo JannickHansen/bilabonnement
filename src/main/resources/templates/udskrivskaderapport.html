@@ -18,8 +18,9 @@
 
 <form class="no-print" th:action="@{/tilbageleveringAfslut}" method="post">
     <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+    <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
     <div class="button-container">
-        <button class="opretBilButton" onclick="window.close()">Luk printvindue</button>
+        <button class="opretBilButton" onclick="window.close()">Afslut tilbagelevering</button>
     </div>
 </form>
 

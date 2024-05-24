@@ -15,6 +15,7 @@
 
 <form th:action="@{/tilbageleveringAfslut}" method="post">
     <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
+    <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
     <div class="button-container">
     <button class="opretBilButton" onclick="window.location.href='/tilbageleveringAfslut'">Afslut tilbagelevering</button>
 </div>
@@ -55,7 +56,6 @@
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
-
 
         <input type="hidden" name="medarbejder" value="1"> <!-- skal rettes -->
         <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->

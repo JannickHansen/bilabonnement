@@ -160,9 +160,10 @@ public class bilabonnementController {
     }
 
     @GetMapping("/Administrator")
+    public String admin(Model model) {
+        boolean isAdmin = brugerService.isAdmin(request);
+        model.addAttribute("isAdmin", isAdmin);
 
-
-    public String admin() {
         if (brugerService.isAdmin(request)) {
             return "Admin";
         }
@@ -220,7 +221,10 @@ public class bilabonnementController {
     }
 
     @GetMapping("/Forretningsudvikler")
-    public String forretningudv() {
+    public String forretningudv(Model model) {
+        boolean isAdmin = brugerService.isAdmin(request);
+        model.addAttribute("isAdmin", isAdmin);
+
         if (!brugerService.isUdvikler(request)) {
             return "redirect:/";
         }
@@ -257,7 +261,10 @@ public class bilabonnementController {
     }
 
     @GetMapping("/registrer")
-    public String registrer() {
+    public String registrer(Model model) {
+        boolean isAdmin = brugerService.isAdmin(request);
+        model.addAttribute("isAdmin", isAdmin);
+
         if (!brugerService.isData(request)) {
             return "redirect:/";
         }
@@ -265,7 +272,10 @@ public class bilabonnementController {
     }
 
     @GetMapping("/skade")
-    public String skade() {
+    public String skade(Model model) {
+        boolean isAdmin = brugerService.isAdmin(request);
+        model.addAttribute("isAdmin", isAdmin);
+
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
@@ -482,14 +492,15 @@ public class bilabonnementController {
 
     // afslut knappen gør at man clearer temporarySkadeList og gør bilstatus til ledig.
     @PostMapping("/tilbageleveringAfslut")
-    public String tilbageleveringAfslut(@RequestParam("chassisNumber") String chassisNumber) {
+    public String tilbageleveringAfslut(@RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
         // Valider adgang slut
 
-        // bil status ændres til ledig
-        bilRepo.changeStatusOnCar(chassisNumber, "ledig");
+        // bil status ændres til Ledig og lejeaftale status til Afventerbetaling og clearer temporarySkadeList
+        bilRepo.changeStatusOnCar(chassisNumber, "Ledig");
+        lejeaftaleRepo.statusUpdate("Afventerbetaling", lejeaftale);
         temporarySkadeList.clear();
         return "redirect:/skade";
     }
@@ -583,7 +594,7 @@ public class bilabonnementController {
         // Valider adgang slut
 
         // bil status ændres til udlejet
-        bilRepo.changeStatusOnCar(chassisNumber, "udlejet");
+        bilRepo.changeStatusOnCar(chassisNumber, "Udlejet");
         return "redirect:/skade";
     }
 }
