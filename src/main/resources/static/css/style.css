@@ -5,6 +5,12 @@ body {
     background-color: white;
     background-image: linear-gradient(to right, gray, lightgray);
 
+
+}
+.wrapperforside {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 .header2 {
     display: flex;
@@ -118,6 +124,7 @@ body {
     background-color: white;
     padding: 20px 30px;
     text-decoration: none;
+
 }
 
 .footer-left, .footer-center, .footer-right {
