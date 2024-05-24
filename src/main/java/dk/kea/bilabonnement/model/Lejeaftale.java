@@ -15,12 +15,9 @@ public class Lejeaftale {
     private String Afhentningssted;
     private int Medarbejder_id;
     private int Kunde_id;
-
+    private int udlejningsperiode;
     private String brand;
-
-
     private String carModel;
-
     private String status;
 
 
@@ -48,10 +45,8 @@ public class Lejeaftale {
         Medarbejder_id = medarbejder_id;
         Kunde_id = kunde_id;
         this.licensePlate = licensePlate;
-        this.brand = brand;
-        this.carModel = carModel;
     }
-    public Lejeaftale(String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate, String status) {
+    public Lejeaftale(String chassisNumber, Date dato, String udlejnings_Type, Time afhentningstidspunkt, String afhentningssted, int medarbejder_id, int kunde_id, String licensePlate, String status, int udlejningsperiode) {
         this.chassisNumber = chassisNumber;
         this.dato = dato;
         Udlejnings_Type = udlejnings_Type;
@@ -61,6 +56,7 @@ public class Lejeaftale {
         Kunde_id = kunde_id;
         this.licensePlate = licensePlate;
         this.status = status;
+        this.udlejningsperiode = udlejningsperiode;
     }
 
     public int getLejeaftale_id() {
@@ -155,4 +151,10 @@ public class Lejeaftale {
     public String getStatus() {return this.status;}
     public void setStatus(String status) {this.status = status;}
 
+    public int getUdlejningsperiode() {
+        return udlejningsperiode;
+    }
+    public void setUdlejningsperiode(int udlejningsperiode) {
+        this.udlejningsperiode = udlejningsperiode;
+    }
 }

@@ -327,6 +327,7 @@ public class bilabonnementController {
                                   @RequestParam("dato")
                                   @DateTimeFormat(pattern = "dd-MM-yyyy") String datotemp,
                                   @RequestParam("Udlejnings_Type") String Udlejnings_Type,
+                                  @RequestParam("Udlejningsperiode") Integer udlejningsperiode,
                                   @RequestParam("Afhentningstidspunkt") String Afhentningstidspunkt,
                                   @RequestParam("Afhentningssted") String Afhentningssted,
                                   @RequestParam("Medarbejder_id") int Medarbejder_id,
@@ -347,6 +348,7 @@ public class bilabonnementController {
 
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("Udlejnings_Type", Udlejnings_Type);
+        model.addAttribute("Udlejningsperiode", udlejningsperiode);
         model.addAttribute("Afhentningssted", Afhentningssted);
         model.addAttribute("Medarbejder_id", Medarbejder_id);
         model.addAttribute("Kunde_Navn", Kunde_Navn);
@@ -370,13 +372,19 @@ public class bilabonnementController {
         int Kunde_id = lejeaftaleRepo.customerCheck(Kunde_Navn, Telefon_nummer, Email, Adresse);
         model.addAttribute("Kunde_id", Kunde_id);
 
+        if (udlejningsperiode == null) {
+            udlejningsperiode = 0;
+        }
+
         if (lejeaftaleRepo.findChassisNumberInDatabase(chassisNumber).isEmpty()) {
             errorText = "Stelnummer findes ikke i databasen.";
         } else if (!validation.validateDato(dato)) {
             errorText = "Ugyldig Dato. Dato må tidligst være 1 dag efter bestilling.";
             model.addAttribute("datotemp", datotemp);
         } else if (!validation.checkStatusIsLedig(bilRepo.loadAllCars(),chassisNumber)) {
-            errorText = "Denne bil er ikke allerede Udlejet.";
+            errorText = "Denne bil er allerede Udlejet.";
+        } else if (udlejningsperiode != 5 && Udlejnings_Type.equals("Limited")) {
+            errorText = "Limited udlejningstype skal være 5 måneder.";
         }
 
         model.addAttribute("errorText", errorText);
@@ -384,14 +392,13 @@ public class bilabonnementController {
             return "OpretLejeaftaleFejl";
         }
 
-        //to make it work - find out how to do cookies // check what employee is logged in /w kevin
         Medarbejder_id = 2;
 
         String licensePlate = lejeaftaleRepo.findLicensePlate(chassisNumber);
         model.addAttribute(licensePlate);
         String status = "Afventende";
         bilRepo.changeStatusOnCar(chassisNumber, "Udlejet");
-        Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Medarbejder_id, Kunde_id, licensePlate, status);
+        Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Medarbejder_id, Kunde_id, licensePlate, status, udlejningsperiode);
         lejeaftaleRepo.create(nyLejeaftale);
         return "redirect:/LejeAftale";
     }
