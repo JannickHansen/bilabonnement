@@ -106,8 +106,8 @@ public class LejeaftaleRepo {
     }
 
     public void create(Lejeaftale lejeaftale) {
-        final String INSERT_SQL = "INSERT INTO lejeaftale (chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkt, Afhentningssted, Medarbejder_id, Kunde_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(INSERT_SQL, lejeaftale.getChassisNumber(), lejeaftale.getDato(), lejeaftale.getUdlejnings_Type(), lejeaftale.getAfhentningstidspunkt(), lejeaftale.getAfhentningssted(), lejeaftale.getMedarbejder_id(), lejeaftale.getKunde_id(), lejeaftale.getStatus());
+        final String INSERT_SQL = "INSERT INTO lejeaftale (chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkt, Afhentningssted, Medarbejder_id, Kunde_id, status, Udlejningsperiode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(INSERT_SQL, lejeaftale.getChassisNumber(), lejeaftale.getDato(), lejeaftale.getUdlejnings_Type(), lejeaftale.getAfhentningstidspunkt(), lejeaftale.getAfhentningssted(), lejeaftale.getMedarbejder_id(), lejeaftale.getKunde_id(), lejeaftale.getStatus(), lejeaftale.getUdlejningsperiode());
     }
 
     public List<Lejeaftale> findAllAfventende(){
