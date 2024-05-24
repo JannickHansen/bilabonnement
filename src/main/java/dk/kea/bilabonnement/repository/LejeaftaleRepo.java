@@ -34,6 +34,24 @@ public class LejeaftaleRepo {
         return jdbcTemplate.query(sql, rowMapper);
     }
 
+    public List<Lejeaftale> findRentedCars() {
+        String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
+                "FROM Lejeaftale " +
+                "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
+                "WHERE Bil.status = 'udlejet'";
+        RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    public List<Lejeaftale> findWaitingCars() {
+        String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
+                "FROM Lejeaftale " +
+                "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
+                "WHERE Bil.status = 'afventer'";
+        RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+
     public String findLicensePlate(String chassisNumber) {
         return "SELECT LicensePlate FROM bil WHERE chassisNumber = ?";
     }
