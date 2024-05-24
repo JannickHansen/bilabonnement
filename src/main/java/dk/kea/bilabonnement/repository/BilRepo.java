@@ -100,7 +100,7 @@ public class BilRepo {
         return foundCars;
     }
 
-    public void deleteChassisNumber(String chassisNumber){
+    public void deleteChassisNumber(String chassisNumber) {
         final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
         jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
     }
@@ -110,5 +110,15 @@ public class BilRepo {
     public void changeStatusOnCar(String chassisNumber, String newStatus) {
         final String UPDATE_STATUS_BY_CHASSISNUMBER_SQL = "UPDATE bil SET status = ? WHERE chassisNumber = ?";
         jdbcTemplate.update(UPDATE_STATUS_BY_CHASSISNUMBER_SQL, newStatus, chassisNumber);
+    }
+    // Metode til at vise available cars i en liste fra databasen.
+    public List<BilModel> showAvailableCars() {
+        String sql = "SELECT * FROM Bil WHERE status = 'ledig'";
+        RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    public List<BilModel> loadWaitingCars() {
+        return loadCars("SELECT * FROM bil WHERE status = 'afventer' ORDER BY status");
     }
 }
