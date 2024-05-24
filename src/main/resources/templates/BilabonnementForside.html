@@ -13,24 +13,23 @@
     <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
 </header>
 <hr class="divide">
+
 <div class="wrapperforside">
 <div class="login-container">
-    <h2>Opret Bruger</h2>
-    <form class="login-form" id="registerForm">
-        <label for="username">Brugernavn:</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="password">Adgangskode:</label>
-        <input type="password" id="password" name="password" required>
-
-        <button class="small-button" type="submit">Opret</button>
-    </form>
+    <h2>Log ind</h2>
+<form class="login-form" th:action="@{/}" th:object="${Bruger}" method="post">
+    <input type="text" name="login" placeholder="Brugernavn" required>
+    <input type="password" name="password" placeholder="Adgangskode" required>
+    <button class="small-button" type="submit">Log ind</button>
+</form>
 </div>
 <div class="helpbox">
     <h1>Log ind med login-informationer</h1>
     <a href="/help">
-        <h2> Tryk for hjælp her</h2>
+        <h2> Tryk for hjælp</h2>
     </a>
+</div>
+
 </div>
 <div class="footer-container">
     <div class="footer-left">
@@ -40,7 +39,6 @@
         <p>CVR: 12345678</p>
     </div>
     <div class="footer-right">Tlf: +45 1234 5678</div>
-</div>
 </div>
 </body>
 </html>
