@@ -544,7 +544,7 @@ public class bilabonnementController {
 
         return "bekraeftlejeaftale";
     }
-    // afslut knappen gør at man clearer temporarySkadeList og gør bilstatus til ledig.
+    // afslut knappen gør at man gør bilstatus til udlejet.
     @PostMapping("/bekraeftlejeaftaleAfslut")
     public String bekraeftlejeaftaleAfslut(@RequestParam("chassisNumber") String chassisNumber) {
         if (!brugerService.isSkade(request)) {
