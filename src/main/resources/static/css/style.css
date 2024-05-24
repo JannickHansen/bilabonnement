@@ -624,14 +624,14 @@ body {
     height: 20px;
 }
 
-/* Hide default checkbox */
+
 .toggle-switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* Style for slider */
+
 .toggle-switch label {
     position: absolute;
     cursor: pointer;
@@ -644,7 +644,7 @@ body {
     transition: background-color 0.4s;
 }
 
-/* Rounded circle */
+
 .toggle-switch label:before {
     position: absolute;
     content: "";
@@ -657,12 +657,12 @@ body {
     transition: transform 0.4s;
 }
 
-/* Styling when checked */
+
 .toggle-switch input:checked + label {
     background-color: #2196F3;
 }
 
-/* Positioning of circle when checked */
+
 .toggle-switch input:checked + label:before {
     transform: translateX(20px);
 }
