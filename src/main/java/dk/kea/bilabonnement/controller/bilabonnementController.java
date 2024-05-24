@@ -237,6 +237,13 @@ public class bilabonnementController {
         }
         return "KPIpage";}
 
+    @PostMapping("/KPIpage")
+    public String KPIpost() {
+        if (!brugerService.isUdvikler(request)){
+            return "redirect:/";
+        }
+    }
+
     @PostMapping("/handleFormSubmission")
     public String handleFormSubmission(
             @RequestParam(name = "bilstatus") String bilstatus,
