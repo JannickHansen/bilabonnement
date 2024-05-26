@@ -16,6 +16,7 @@ public class BrugerService {
 
     }
 
+    // Dette er en metode til at sørge for adgang til de forskellige afdelinger. Den laves i "private" da den kun bruges i denne klasse.
     private boolean validerRole(HttpServletRequest request, String role){
         HttpSession session = request.getSession();
         Bruger bruger = (Bruger) session.getAttribute("bruger");
@@ -28,6 +29,8 @@ public class BrugerService {
         return bruger.getRole().equals(role);
     }
 
+
+    // disse 4 metoder, bruger metoden ovenfor og bliver implementeret i vores controller for at checke, at bruger har den rigtige adgang.B
     public boolean isAdmin(HttpServletRequest request){
         return validerRole(request, "Administrator");
     }
