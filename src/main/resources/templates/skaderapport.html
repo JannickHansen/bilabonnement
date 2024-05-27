@@ -12,6 +12,7 @@
 
     <button class="logud-knap">Log ud</button>
 </header>
+<!-- lavet af Thomas !-->
 <hr class="divide">
 <form th:action="@{/tilbageleveringAfslut}" method="post">
     <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
@@ -56,8 +57,7 @@
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
 
-        <input type="hidden" name="medarbejder" value="1"> <!-- skal rettes -->
-        <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->
+        <input type="hidden" name="kunde" th:value="${kunde}">
         <button class="small-button" type="submit">Udskriv</button>
     </form>
 

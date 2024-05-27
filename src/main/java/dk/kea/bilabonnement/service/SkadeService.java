@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class SkadeService {
-
+    //lavet af Thomas
     @Autowired
     private SkadeRepo skadeRepo;
 

@@ -21,6 +21,7 @@ import java.util.Map;
 
 @Repository
 public class LejeaftaleRepo {
+    //lavet af Jannick
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -31,17 +32,11 @@ public class LejeaftaleRepo {
         LejeaftaleRepo.dataSource = dataSource;
     }
 
-    public List<Lejeaftale> findAll(){
-        String sql = "SELECT Lejeaftale.*, bil.brand, bil.carModel, bil.licensePlate FROM Lejeaftale, bil WHERE Lejeaftale.chassisNumber = bil.chassisNumber";
-        RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
-        return jdbcTemplate.query(sql, rowMapper);
-    }
-
     public List<Lejeaftale> findRentedCars() {
         String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
                 "FROM Lejeaftale " +
                 "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
-                "WHERE Bil.status = 'Udlejet'";
+                "WHERE Lejeaftale.status = 'Udlejet'";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
@@ -50,7 +45,7 @@ public class LejeaftaleRepo {
         String sql = "SELECT Lejeaftale.*, Bil.brand, Bil.carModel, Bil.licensePlate " +
                 "FROM Lejeaftale " +
                 "JOIN Bil ON Lejeaftale.chassisNumber = Bil.chassisNumber " +
-                "WHERE Bil.status = 'Afventende'";
+                "WHERE Lejeaftale.status = 'Afventende'";
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
