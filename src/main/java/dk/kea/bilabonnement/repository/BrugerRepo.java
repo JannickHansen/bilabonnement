@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 @Repository
 public class BrugerRepo {
+    // lavet af Kevin
     private static DataSource dataSource;
 
     @Autowired
