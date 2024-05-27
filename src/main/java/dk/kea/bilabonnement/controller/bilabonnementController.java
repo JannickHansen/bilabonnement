@@ -237,6 +237,7 @@ public class bilabonnementController {
             @RequestParam(value = "gnslejeperiode", required = false, defaultValue = "false") boolean gnslejeperiode,
             @RequestParam(value = "gnsskadepris", required = false, defaultValue = "false") boolean gnsskadepris,
             @RequestParam(value = "gnsudlejepris", required = false, defaultValue = "false") boolean gnsudlejepris,
+            @RequestParam(value = "totalpris", required = false, defaultValue = "false") boolean totalpris,
             Model model
     ) {
 
@@ -266,6 +267,16 @@ public class bilabonnementController {
 
             model.addAttribute("gnsudlejepris", gnsudlejepris);
             model.addAttribute("udlejeprisfinal", udlejeprisfinal);
+        }
+
+        if (totalpris) {
+            List<Integer> totalprislist = kpiService.totalpris();
+            int totalprisantal = totalprislist.get(0);
+            int totalprisfinal = totalprislist.get(1);
+
+            model.addAttribute("totalpris", totalpris);
+            model.addAttribute("totalprisantal", totalprisantal);
+            model.addAttribute("totalprisfinal", totalprisfinal);
         }
 
 
