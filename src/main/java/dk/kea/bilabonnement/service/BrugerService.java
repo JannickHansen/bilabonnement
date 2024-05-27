@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BrugerService {
+    // lavet af Kevin
     // metode til at validere bruger, fra cookies.
     // vi vil gerne gemme valideret bruger i cookie.
     // lavet med hjælp af jarls link: https://jart.gitbook.io/2-semester-programmering/sessions

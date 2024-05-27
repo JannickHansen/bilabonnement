@@ -1,6 +1,7 @@
 package dk.kea.bilabonnement.model;
 
 public class Bruger {
+    // lavet af Kevin
     int medarbejderId;
     String login;
     String password;
