@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidationService {
+    //lavet af Jannick
 
     @Autowired
     private LejeaftaleRepo lejeaftaleRepo;
@@ -63,10 +64,6 @@ public class ValidationService {
     public boolean validateDato(Date dato) {
         Date today = new Date();
         return dato.compareTo(today) >= 1;
-    }
-
-    public String findLicensePlate(String LicensePlate) {
-        return lejeaftaleRepo.findLicensePlate(LicensePlate);
     }
 
     public boolean validateDato(String dato) {

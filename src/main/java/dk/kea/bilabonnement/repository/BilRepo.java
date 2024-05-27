@@ -15,6 +15,7 @@ import java.util.List;
 
 @Repository
 public class BilRepo {
+    //lavet af Jannick
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -146,12 +147,8 @@ public class BilRepo {
     }
     // Metode til at vise available cars i en liste fra databasen.
     public List<BilModel> showAvailableCars() {
-        String sql = "SELECT * FROM Bil WHERE status = 'ledig'";
+        String sql = "SELECT * FROM Bil WHERE status = 'Ledig'";
         RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
         return jdbcTemplate.query(sql, rowMapper);
-    }
-
-    public List<BilModel> loadWaitingCars() {
-        return loadCars("SELECT * FROM bil WHERE status = 'afventer' ORDER BY status");
     }
 }

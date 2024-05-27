@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class Lejeaftale {
+    // lavet af Jannick
     private String licensePlate;
     private int Lejeaftale_id;
     private String chassisNumber;

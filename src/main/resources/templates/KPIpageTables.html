@@ -11,6 +11,7 @@
     <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
     <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
 </header>
+<!-- lavet af Jannick !-->
 <hr class="divide">
 <div class="kpicontainer">
     <div class="kpi-container">
@@ -76,7 +77,7 @@
                 <label for="gnsudlejepris"></label>
             </div>
 
-            <label for="totalpris">Totalpris for udlejede biler:</label>
+            <label for="totalpris">Totalpris for Aktive Lejeaftaler:</label>
             <div class="toggle-switch">
                 <input type="checkbox" id="totalpris" name="totalpris">
                 <label for="totalpris"></label>
@@ -131,7 +132,7 @@
             <table>
                 <tr>
                     <th th:if="${totalpris}">Antal Udlejede Biler</th>
-                    <th th:if="${totalpris}">Total Pris For Udlejede Biler</th>
+                    <th th:if="${totalpris}">Total Pris Aktive Lejeaftaler</th>
                 </tr>
                 <tr>
                     <td th:if="${totalpris}" th:text="${totalprisantal}"></td>

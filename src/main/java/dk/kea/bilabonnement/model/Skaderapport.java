@@ -1,6 +1,7 @@
 package dk.kea.bilabonnement.model;
 
 public class Skaderapport {
+    //lavet af Thomas
     private int skadeId;
     private int lejeaftaleId;
     private String skade;

@@ -1,6 +1,7 @@
 package dk.kea.bilabonnement.model;
 
 public class BilModel {
+    //lavet af Jannick
     String chassisNumber;
     String brand;
     String carModel;

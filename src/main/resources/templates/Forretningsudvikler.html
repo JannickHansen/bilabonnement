@@ -12,6 +12,7 @@
     <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
     <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
 </header>
+<!-- lavet af Kevin !-->
 <hr class="divide">
 <div class="box-container">
     <button class="containerbtn" onclick="window.location.href='/KPIpage'" >Nøgletal<br>
@@ -20,7 +21,7 @@
 </div>
 
 <div th:if="${isAdmin}" class="button-container">
-    <button class="opretBilButton" onclick="window.location.href='/Administrator'">Tilbage til Administator panel</button>
+    <button class="opretBilButton" onclick="window.location.href='/Administrator'">Tilbage til Administrator panel</button>
 </div>
 
 
