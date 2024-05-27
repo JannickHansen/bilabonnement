@@ -15,8 +15,8 @@ public class SkadeRepo {
     private JdbcTemplate jdbcTemplate;
 
     public void save(Skaderapport skaderapport, int lejeaftaleId) {
-        String sql = "INSERT INTO Skaderapport (Skade, Skade_Pris, Medarbejder_id, Kunde_id, Lejeaftale_id) VALUES (?, ?, 1, 1, ?)";
-        jdbcTemplate.update(sql, skaderapport.getSkade(), skaderapport.getSkadePris(), lejeaftaleId);
+        String sql = "INSERT INTO Skaderapport (Skade, Skade_Pris, Kunde_id, Lejeaftale_id) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, skaderapport.getSkade(), skaderapport.getSkadePris(), skaderapport.getKundeId(), lejeaftaleId);
     }
 
 }

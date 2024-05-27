@@ -7,6 +7,7 @@ import dk.kea.bilabonnement.model.Skaderapport;
 import dk.kea.bilabonnement.repository.BilRepo;
 import dk.kea.bilabonnement.repository.LejeaftaleRepo;
 import dk.kea.bilabonnement.repository.SkadeRepo;
+import dk.kea.bilabonnement.service.KPIService;
 import dk.kea.bilabonnement.service.ValidationService;
 import dk.kea.bilabonnement.repository.BrugerRepo;
 import dk.kea.bilabonnement.service.BrugerService;
@@ -20,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.util.List;
@@ -36,7 +35,8 @@ public class bilabonnementController {
 
     @Autowired
     BilRepo bilRepo;
-
+    @Autowired
+    KPIService kpiService;
     @Autowired
     LejeaftaleRepo lejeaftaleRepo;
     @Autowired
@@ -45,7 +45,6 @@ public class bilabonnementController {
     BrugerService brugerService;
     @Autowired
     ValidationService validationService;
-
     @Autowired
     SkadeRepo skadeRepo;
 
@@ -107,7 +106,7 @@ public class bilabonnementController {
         }
         // Valider adgang slut
 
-        ValidationService validation = new ValidationService();
+        ValidationService validation = new ValidationService(lejeaftaleRepo);
 
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
@@ -117,32 +116,15 @@ public class bilabonnementController {
         model.addAttribute("fuel", fuel);
 
         String errorText = null;
-
-        if (!validation.validateChassisNumber(chassisNumber)) {
-            errorText = "Ugyldigt Stelnummer";
-        } else if (!validation.validateBrand(brand)) {
-            errorText = "Ugyldigt Mærke";
-        } else if (!validation.validateCarModel(carModel)) {
-            errorText = "Ugyldig Model";
-        } else if (!validation.validateLicensePlate(licensePlate)) {
-            errorText = "Ugyldig Nummerplade";
-        }
-
-        int carUniquenessCheck = BilRepo.authenticateUniqueCar(chassisNumber, licensePlate);
-
-        if (carUniquenessCheck == 1) {
-            errorText = "Stelnummer er allerede oprettet";
-        } else if (carUniquenessCheck == 2) {
-            errorText = "Nummerplade er allerede oprettet";
-        }
+        errorText = validation.checkErrorOpretBil(chassisNumber, brand, carModel, licensePlate, errorText);
 
         /* Hvis en fejl findes, indsættes teksten i modellen, og dette sendes til opretbilfejl siden. */
         model.addAttribute("errorText", errorText);
         if (errorText != null) {
             return "OpretBilFejl";
         }
-
-        BilModel bil = new BilModel(chassisNumber, brand, carModel, type, licensePlate, fuel);
+        int km = 0;
+        BilModel bil = new BilModel(chassisNumber, brand, carModel, type, licensePlate, fuel, km);
         bil.setAvailable();
         bilRepo.create(bil);
 
@@ -237,11 +219,57 @@ public class bilabonnementController {
         }
         return "KPIpage";}
 
-    @PostMapping("/KPIpage")
-    public String KPIpost() {
+    @GetMapping("/KPIpageTables")
+    public String KPItables() {
         if (!brugerService.isUdvikler(request)){
             return "redirect:/";
         }
+        return "/KPIpage";
+    }
+
+    @PostMapping("/KPIpageTables")
+    public String KPIpageTable(
+            @RequestParam("bilstatus") String bilstatus,
+            @RequestParam("brand") String brand,
+            @RequestParam("carModel") String carModel,
+            @RequestParam("type") String type,
+            @RequestParam("fuel") String fuel,
+            @RequestParam(value = "gnslejeperiode", required = false, defaultValue = "false") boolean gnslejeperiode,
+            @RequestParam(value = "gnsskadepris", required = false, defaultValue = "false") boolean gnsskadepris,
+            @RequestParam(value = "gnsudlejepris", required = false, defaultValue = "false") boolean gnsudlejepris,
+            Model model
+    ) {
+
+        if (!brugerService.isUdvikler(request)){
+            return "redirect:/";
+        }
+
+        List<BilModel> bilList = kpiService.kpiManageCriteria(bilstatus, brand, carModel, type, fuel);
+        model.addAttribute("bilList",bilList);
+
+        if (gnslejeperiode) {
+            int lejeperiodefinal = kpiService.gnslejeperiodehent(bilList);
+
+            model.addAttribute("gnslejeperiode", gnslejeperiode);
+            model.addAttribute("lejeperiodefinal", lejeperiodefinal);
+        }
+
+        if (gnsskadepris) {
+            int skadeprisfinal = kpiService.gnsskadeprishent(bilList);
+
+            model.addAttribute("gnsskadepris", gnsskadepris);
+            model.addAttribute("skadeprisfinal", skadeprisfinal);
+        }
+
+        if (gnsudlejepris) {
+            double udlejeprisfinal = kpiService.gnsudlejepris(bilList);
+
+            model.addAttribute("gnsudlejepris", gnsudlejepris);
+            model.addAttribute("udlejeprisfinal", udlejeprisfinal);
+        }
+
+
+        return "/KPIpageTables";
     }
 
     @PostMapping("/handleFormSubmission")
@@ -337,7 +365,6 @@ public class bilabonnementController {
                                   @RequestParam("Udlejningsperiode") Integer udlejningsperiode,
                                   @RequestParam("Afhentningstidspunkt") String Afhentningstidspunkt,
                                   @RequestParam("Afhentningssted") String Afhentningssted,
-                                  @RequestParam("Medarbejder_id") int Medarbejder_id,
                                   @RequestParam("Kunde_Navn") String Kunde_Navn,
                                   @RequestParam("Telefon_nummer") int Telefon_nummer,
                                   @RequestParam("Email") String Email,
@@ -347,17 +374,15 @@ public class bilabonnementController {
             return "redirect:/";
         }
 
-        ValidationService validation = new ValidationService();
+        ValidationService validation = new ValidationService(lejeaftaleRepo);
         String errorText = null;
 
-        LocalTime afhentningstidspunkttemp2 = LocalTime.parse(Afhentningstidspunkt, DateTimeFormatter.ofPattern("HH:mm"));
-        Time Afhentningstidspunkttemp = Time.valueOf(afhentningstidspunkttemp2);
+        Time Afhentningstidspunkttemp = validation.convertTime(Afhentningstidspunkt);
 
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("Udlejnings_Type", Udlejnings_Type);
         model.addAttribute("Udlejningsperiode", udlejningsperiode);
         model.addAttribute("Afhentningssted", Afhentningssted);
-        model.addAttribute("Medarbejder_id", Medarbejder_id);
         model.addAttribute("Kunde_Navn", Kunde_Navn);
         model.addAttribute("Telefon_nummer", Telefon_nummer);
         model.addAttribute("Email", Email);
@@ -383,15 +408,9 @@ public class bilabonnementController {
             udlejningsperiode = 0;
         }
 
-        if (lejeaftaleRepo.findChassisNumberInDatabase(chassisNumber).isEmpty()) {
-            errorText = "Stelnummer findes ikke i databasen.";
-        } else if (!validation.validateDato(dato)) {
-            errorText = "Ugyldig Dato. Dato må tidligst være 1 dag efter bestilling.";
-            model.addAttribute("datotemp", datotemp);
-        } else if (!validation.checkStatusIsLedig(bilRepo.loadAllCars(),chassisNumber)) {
+        errorText = validation.checkErrors(chassisNumber, dato, udlejningsperiode, Udlejnings_Type, errorText);
+        if (!validation.checkStatusIsLedig(bilRepo.loadAllCars(), chassisNumber)) {
             errorText = "Denne bil er allerede Udlejet.";
-        } else if (udlejningsperiode != 5 && Udlejnings_Type.equals("Limited")) {
-            errorText = "Limited udlejningstype skal være 5 måneder.";
         }
 
         model.addAttribute("errorText", errorText);
@@ -399,19 +418,21 @@ public class bilabonnementController {
             return "OpretLejeaftaleFejl";
         }
 
-        Medarbejder_id = 2;
-
         String licensePlate = lejeaftaleRepo.findLicensePlate(chassisNumber);
         model.addAttribute(licensePlate);
+
+        model.addAttribute("datotemp", datotemp);
+
         String status = "Afventende";
         bilRepo.changeStatusOnCar(chassisNumber, "Udlejet");
-        Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Medarbejder_id, Kunde_id, licensePlate, status, udlejningsperiode);
+
+        Lejeaftale nyLejeaftale = new Lejeaftale(chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkttemp, Afhentningssted, Kunde_id, licensePlate, status, udlejningsperiode);
         lejeaftaleRepo.create(nyLejeaftale);
         return "redirect:/LejeAftale";
     }
 
     @GetMapping("/OpretLejeaftale")
-    public String opretLejeaftaleFejl(Model model) {
+    public String opretLejeaftaleFejl() {
         // Valider adgang start
         if (!brugerService.isData(request)) {
             return "redirect:/";
@@ -520,7 +541,7 @@ public class bilabonnementController {
     }
 
     @PostMapping("/createSkaderapport")
-    public String createSkaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("medarbejder") int medarbejder, @RequestParam("kunde") int kunde, Model model) {
+    public String createSkaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, Model model) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
@@ -528,12 +549,10 @@ public class bilabonnementController {
 
         for (Skaderapport skaderapport : temporarySkadeList) {
             skaderapport.setLejeaftaleId(lejeaftale);
-            skaderapport.setMedarbejderId(medarbejder);
             skaderapport.setKundeId(kunde);
-            skadeService.opretSkade(skaderapport.getSkade(), skaderapport.getLejeaftaleId(), skaderapport.getSkadePris(), skaderapport.getMedarbejderId(), skaderapport.getKundeId());
+            skadeService.opretSkade(skaderapport.getSkade(), skaderapport.getLejeaftaleId(), skaderapport.getSkadePris(), skaderapport.getKundeId());
         }
         model.addAttribute("lejeaftale", lejeaftale);
-        model.addAttribute("medarbejder", medarbejder);
         model.addAttribute("kunde", kunde);
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
@@ -566,13 +585,12 @@ public class bilabonnementController {
     }
 
     @PostMapping("/udskrivskaderapport")
-    public String udskrivskaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("medarbejder") int medarbejder, @RequestParam("kunde") int kunde, Model model) {
+    public String udskrivskaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, Model model) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
         // Valider adgang slut
         model.addAttribute("lejeaftale", lejeaftale);
-        model.addAttribute("medarbejder", medarbejder);
         model.addAttribute("kunde", kunde);
         model.addAttribute("chassisNumber", chassisNumber);
         model.addAttribute("brand", brand);
