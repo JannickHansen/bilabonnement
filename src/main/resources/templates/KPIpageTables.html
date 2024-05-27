@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement Administrator</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}">
+</head>
+<body>
+<header class="header2">
+    <img class="pictureLogo" src="../static/img/BILABONNEMENT_Logo.png" width="600" th:src="@{/img/BILABONNEMENT_Logo.png}">
+    <button onclick="location.href='/?logud=1'" class="logud-knap">Log ud</button>
+</header>
+<hr class="divide">
+<div class="kpicontainer">
+    <div class="kpi-container">
+        <h2>KPI Manager</h2>
+        <h3>Vælg søgekriterier:</h3>
+        <form class="kpi-form" action="/KPIpageTables" method="post">
+
+            <label for="bilstatus">Hent Bil Efter Status</label>
+            <select class="opretBil-dropdown" id="bilstatus" name="bilstatus">
+                <option value="">Alle Biler</option>
+                <option value="Ledig">Ledige Biler</option>
+                <option value="Udlejet">Udlejede Biler</option>
+                <option value="Tilbageleveret">Tilbageleverede Biler</option>
+            </select>
+
+            <label for="brand">Mærke:</label>
+            <input type="text" id="brand" name="brand" placeholder="Mærke">
+            <label for="carModel">Model:</label>
+            <input type="text" id="carModel" name="carModel" placeholder="Model">
+
+            <label for="type">Type:</label>
+            <select class="opretBil-dropdown" id="type" name="type">
+                <option value="">Alle Typer</option>
+                <option value="Carbriolet">Carbriolet</option>
+                <option value="Coupé">Coupé</option>
+                <option value="Crossover">Crossover</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Roadster">Roadster</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Sports Tourer">Sports Tourer</option>
+                <option value="Stationcar">Stationcar</option>
+                <option value="SUV">SUV</option>
+                <option value="Lille Varebil">Lille Varebil</option>
+                <option value="Mellem Varebil">Mellem Varebil</option>
+                <option value="Stor Varebil">Stor Varebil</option>
+                <option value="Lille Elektrisk Varebil">Lille Elektrisk Varebil</option>
+                <option value="Mellem Elektrisk Varebil">Mellem Elektrisk Varebil</option>
+            </select>
+
+            <label for="fuel">Brændstof:</label>
+            <select class="opretBil-dropdown" id="fuel" name="fuel">
+                <option value="">Alle</option>
+                <option value="Benzin">Benzin</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Elektrisk">Elektrisk</option>
+                <option value="Gas">Gas</option>
+            </select>
+
+            <label for="gnslejeperiode">Gennemsnitlig Lejeperiode:</label>
+            <div class="toggle-switch">
+                <input type="checkbox" id="gnslejeperiode" name="gnslejeperiode">
+                <label for="gnslejeperiode"></label>
+            </div>
+
+            <label for="gnsskadepris">Gennemsnitlig Pris per skade:</label>
+            <div class="toggle-switch">
+                <input type="checkbox" id="gnsskadepris" name="gnsskadepris">
+                <label for="gnsskadepris"></label>
+            </div>
+
+            <label for="gnsudlejepris">Gennemsnitlig Udlejningspris:</label>
+            <div class="toggle-switch">
+                <input type="checkbox" id="gnsudlejepris" name="gnsudlejepris">
+                <label for="gnsudlejepris"></label>
+            </div>
+
+            <button class="small-button" type="submit">Opret</button>
+
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Chassis Number</th>
+                <th>License Plate</th>
+                <th>Kilometers</th>
+                <th>Brand</th>
+                <th>Car Model</th>
+                <th>Type</th>
+                <th>Fuel</th>
+                <th>Status</th>
+            </tr>
+
+            <tr th:each="bil : ${bilList}">
+                <td th:text="${bil.chassisNumber}"></td>
+                <td th:text="${bil.licensePlate}"></td>
+                <td th:text="${bil.getKm()}"></td>
+                <td th:text="${bil.brand}"></td>
+                <td th:text="${bil.carModel}"></td>
+                <td th:text="${bil.type}"></td>
+                <td th:text="${bil.fuel}"></td>
+                <td th:text="${bil.status}"></td>
+            </tr>
+        </table>
+
+        <div th:if="${gnslejeperiode} or ${gnsskadepris} or ${gnsudlejepris}">
+            <table>
+                <tr>
+                    <th th:if="${gnslejeperiode}">Gennemsnitlig Lejeperiode</th>
+                    <th th:if="${gnsskadepris}">Gennemsnitlig Skade Pris</th>
+                    <th th:if="${gnsudlejepris}">Gennemsnitlig Udlejepris</th>
+                </tr>
+                <tr>
+                    <td th:if="${gnslejeperiode}" th:text="${lejeperiodefinal}"></td>
+                    <td th:if="${gnsskadepris}" th:text="${skadeprisfinal}"></td>
+                    <td th:if="${gnsudlejepris}" th:text="${udlejeprisfinal}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

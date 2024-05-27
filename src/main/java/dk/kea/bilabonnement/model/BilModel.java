@@ -8,27 +8,27 @@ public class BilModel {
     String licensePlate;
     String fuel;
     String status;
-    int employeeID;
+    int km;
 
-    public BilModel(String chassisNumber, String brand, String carModel, String type, String licensePlate, String fuel) {
+    public BilModel(String chassisNumber, String brand, String carModel, String type, String licensePlate, String fuel, int km) {
         this.chassisNumber = chassisNumber;
         this.brand = brand;
         this.carModel = carModel;
         this.type = type;
         this.licensePlate = licensePlate;
         this.fuel = fuel;
+        this.km = km;
     }
 
     public BilModel() {}
 
+    // Get methoder
     public String getChassisNumber() {
         return this.chassisNumber;
     }
     public String getBrand() {
         return this.brand;
     }
-
-    // Get methoder
     public String getCarModel() {
         return this.carModel;
     }
@@ -44,8 +44,8 @@ public class BilModel {
     public String getStatus() {
         return this.status;
     }
-    public int getEmployeeID() {
-        return this.employeeID;
+    public int getKm() {
+        return this.km;
     }
 
     // Set methoder
@@ -70,13 +70,14 @@ public class BilModel {
     public void setStatus(String status) {
         this.status = status;
     }
-    public void setEmployeeID(int employeeID) {
-        this.employeeID = employeeID;
+    public void setKm(int km) {
+        this.km = km;
     }
 
     // Metoder til at ændre unik status på bil objekter
     public void setAvailable() {
         this.status = "Ledig";
     }
+
 
 }

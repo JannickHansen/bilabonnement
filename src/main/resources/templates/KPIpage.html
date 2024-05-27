@@ -17,14 +17,14 @@
 <div class="opretBil-container">
     <h2>KPI Manager</h2>
     <h3>Vælg søgekriterier:</h3>
-    <form class="opretBil-form" action="/KPIpage" method="post">
+    <form class="opretBil-form" action="/KPIpageTables" method="post">
 
         <label for="bilstatus">Hent Bil Efter Status</label>
         <select class="opretBil-dropdown" id="bilstatus" name="bilstatus">
-            <option value="allebiler">Alle Biler</option>
-            <option value="ledigebiler">Ledige Biler</option>
-            <option value="udlejedebiler">Udlejede Biler</option>
-            <option value="tilbageleveretbiler">Tilbageleverede Biler</option>
+            <option value="">Alle Biler</option>
+            <option value="Ledig">Ledige Biler</option>
+            <option value="Udlejet">Udlejede Biler</option>
+            <option value="Tilbageleveret">Tilbageleverede Biler</option>
         </select>
 
         <label for="brand">Mærke:</label>

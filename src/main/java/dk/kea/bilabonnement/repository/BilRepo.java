@@ -27,8 +27,8 @@ public class BilRepo {
     }
 
     public void create(BilModel bil) {
-        final String INSERT_SQL = "INSERT INTO bil (chassisNumber, licensePlate, brand, carModel, type, fuel, status, employeeID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(INSERT_SQL, bil.getChassisNumber(), bil.getLicensePlate(), bil.getBrand(), bil.getCarModel(), bil.getType(), bil.getFuel(), bil.getStatus(), bil.getEmployeeID());
+        final String INSERT_SQL = "INSERT INTO bil (chassisNumber, licensePlate, km, brand, carModel, type, fuel, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(INSERT_SQL, bil.getChassisNumber(), bil.getLicensePlate(), bil.getKm(), bil.getBrand(), bil.getCarModel(), bil.getType(), bil.getFuel(), bil.getStatus());
     }
 
     /*Methode taget fra tidligere gruppeprojekt, Wishlist, og redigeret for at løse opgaven.
@@ -75,6 +75,39 @@ public class BilRepo {
         return loadCars("SELECT * FROM bil WHERE status = 'udlejet' ORDER BY status");
     }
 
+    public List<BilModel> searchByKPI(String status, String brand, String carModel, String type, String fuel) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM bil");
+
+        // Vi laver en liste af criterier indsat fra controlleren, altså brugerens input
+        List<String> searchCriteria = new ArrayList<>();
+
+        // Søger efter specifikt status, ignorerer hvis intet input
+        if (status != null && !status.isEmpty()) {
+            searchCriteria.add("status = '" + status + "'");
+        }
+        // Søger efter specifikt brand, ignorerer hvis intet input
+        if (brand != null && !brand.isEmpty()) {
+            searchCriteria.add("brand = '" + brand + "'");
+        }
+        // Søger efter specifik bilmodel, ignorerer hvis intet input
+        if (carModel != null && !carModel.isEmpty()) {
+            searchCriteria.add("carModel = '" + carModel + "'");
+        }
+        // Søger efter specifik type, ignorerer hvis intet input
+        if (type != null && !type.isEmpty()) {
+            searchCriteria.add("type = '" + type + "'");
+        }
+        // Søger efter specifikt fuel, ignorerer hvis intet input
+        if (fuel != null && !fuel.isEmpty()) {
+            searchCriteria.add("fuel = '" + fuel + "'");
+        }
+        // Samler kriterierne til et SQL query
+        if (!searchCriteria.isEmpty()) {
+            queryBuilder.append(" WHERE ").append(String.join(" AND ", searchCriteria));
+        }
+        return loadCars(queryBuilder.toString());
+    }
+
     private List<BilModel> loadCars(String sql) {
         List<BilModel> foundCars = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
@@ -85,12 +118,12 @@ public class BilRepo {
                 BilModel bil = new BilModel();
                 bil.setChassisNumber(resultSet.getString("chassisNumber"));
                 bil.setLicensePlate(resultSet.getString("LicensePlate"));
+                bil.setKm(resultSet.getInt("km"));
                 bil.setBrand(resultSet.getString("brand"));
                 bil.setCarModel(resultSet.getString("carModel"));
                 bil.setType(resultSet.getString("type"));
                 bil.setFuel(resultSet.getString("fuel"));
                 bil.setStatus(resultSet.getString("status"));
-                bil.setEmployeeID(resultSet.getInt("employeeID"));
 
                 foundCars.add(bil);
             }

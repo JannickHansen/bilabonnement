@@ -65,6 +65,45 @@ public class LejeaftaleRepo {
         return jdbcTemplate.query(sql, rowMapper, chassisNumber);
     }
 
+    public List<Integer> findUdlejningsPeriodeByChassisNumber(String chassisNumber) {
+        String sql = "SELECT udlejningsperiode FROM lejeaftale WHERE chassisNumber = ?";
+        RowMapper<Integer> rowMapper = new RowMapper<>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt("udlejningsperiode");
+            }
+        };
+        return jdbcTemplate.query(sql, rowMapper, chassisNumber);
+    }
+    public List<Integer> findSkadePrisByChassisNumber(String chassisNumber) {
+        String sql = "SELECT sr.Skade_Pris " +
+                "FROM skaderapport sr " +
+                "JOIN lejeaftale la ON sr.lejeaftale_id = la.lejeaftale_id " +
+                "JOIN bil b ON la.chassisNumber = b.chassisNumber " +
+                "WHERE b.chassisNumber = ?";
+
+        RowMapper<Integer> rowMapper = new RowMapper<>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt("Skade_Pris");
+            }
+        };
+        return jdbcTemplate.query(sql, rowMapper, chassisNumber);
+    }
+    public List<Lejeaftale> findLejePrisByChassisNumber(String chassisNumber) {
+        String sql = "SELECT udlejningsperiode, Udlejnings_Type FROM lejeaftale WHERE chassisNumber = ?";
+        RowMapper<Lejeaftale> rowMapper = new RowMapper<>() {
+            @Override
+            public Lejeaftale mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Lejeaftale lejeaftale = new Lejeaftale();
+                lejeaftale.setUdlejningsperiode(rs.getInt("udlejningsperiode"));
+                lejeaftale.setUdlejnings_Type(rs.getString("Udlejnings_Type"));
+                return lejeaftale;
+            }
+        };
+        return jdbcTemplate.query(sql, rowMapper, chassisNumber);
+    }
+
     public int customerCheck(String Kunde_Navn, int Telefon_nummer, String Email, String Adresse) {
         String selectSql = "SELECT Kunde_id FROM kunde WHERE Kunde_Navn = ? AND Telefon_nummer = ? AND Email = ? AND Adresse = ?";
         String insertSql = "INSERT INTO kunde (Kunde_Navn, Telefon_nummer, Email, Adresse) VALUES (?, ?, ?, ?)";
@@ -106,21 +145,28 @@ public class LejeaftaleRepo {
     }
 
     public void create(Lejeaftale lejeaftale) {
-        final String INSERT_SQL = "INSERT INTO lejeaftale (chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkt, Afhentningssted, Medarbejder_id, Kunde_id, status, Udlejningsperiode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(INSERT_SQL, lejeaftale.getChassisNumber(), lejeaftale.getDato(), lejeaftale.getUdlejnings_Type(), lejeaftale.getAfhentningstidspunkt(), lejeaftale.getAfhentningssted(), lejeaftale.getMedarbejder_id(), lejeaftale.getKunde_id(), lejeaftale.getStatus(), lejeaftale.getUdlejningsperiode());
+        final String INSERT_SQL = "INSERT INTO lejeaftale (chassisNumber, dato, Udlejnings_Type, Afhentningstidspunkt, Afhentningssted, Kunde_id, status, Udlejningsperiode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(INSERT_SQL, lejeaftale.getChassisNumber(), lejeaftale.getDato(), lejeaftale.getUdlejnings_Type(), lejeaftale.getAfhentningstidspunkt(), lejeaftale.getAfhentningssted(), lejeaftale.getKunde_id(), lejeaftale.getStatus(), lejeaftale.getUdlejningsperiode());
     }
 
-    public List<Lejeaftale> findAllAfventende(){
-        String sql = "SELECT lejeaftale.*, bil.LicensePlate FROM lejeaftale, bil WHERE lejeaftale.chassisNumber = bil.chassisNumber AND lejeaftale.status = 'Afventende'";
+    public List<Lejeaftale> findAllAfventende() {
+        String sql = "SELECT lejeaftale.*, bil.LicensePlate " +
+                "FROM lejeaftale " +
+                "JOIN bil ON lejeaftale.chassisNumber = bil.chassisNumber " +
+                "WHERE lejeaftale.status = 'Afventende'";
+
         RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
-        return jdbcTemplate.query(sql, rowMapper);
+
+        //trycatch til at fange hvis databasen ikke har nogle lejeaftaler som kvalificere til "Afventende"
+        try {
+            return jdbcTemplate.query(sql, rowMapper);
+        } catch (Exception e) {
+            System.err.println("SQL query execution failed: " + e.getMessage());
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
-    public List<Lejeaftale> lejeaftalePeriodeFind() {
-        String sql = "SELECT Udlejnings_Type, chassisNumber FROM lejeaftale WHERE chassisNumber = :chassisNumber";
-        RowMapper<Lejeaftale> rowMapper = new BeanPropertyRowMapper<>(Lejeaftale.class);
-        return jdbcTemplate.query(sql, rowMapper);
-    }
     public void statusUpdate(String status, int lejeaftale_id){
         final String UPDATE_STATUS_BY_LEJEAFTALE_SQL = "UPDATE lejeaftale SET status = ? WHERE lejeaftale_id = ?";
         jdbcTemplate.update(UPDATE_STATUS_BY_LEJEAFTALE_SQL, status, lejeaftale_id);
