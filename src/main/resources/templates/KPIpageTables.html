@@ -23,7 +23,6 @@
                 <option value="">Alle Biler</option>
                 <option value="Ledig">Ledige Biler</option>
                 <option value="Udlejet">Udlejede Biler</option>
-                <option value="Tilbageleveret">Tilbageleverede Biler</option>
             </select>
 
             <label for="brand">Mærke:</label>
@@ -77,6 +76,12 @@
                 <label for="gnsudlejepris"></label>
             </div>
 
+            <label for="totalpris">Totalpris for udlejede biler:</label>
+            <div class="toggle-switch">
+                <input type="checkbox" id="totalpris" name="totalpris">
+                <label for="totalpris"></label>
+            </div>
+
             <button class="small-button" type="submit">Opret</button>
 
         </form>
@@ -121,7 +126,24 @@
                 </tr>
             </table>
         </div>
+
+        <div th:if="${totalpris}">
+            <table>
+                <tr>
+                    <th th:if="${totalpris}">Antal Udlejede Biler</th>
+                    <th th:if="${totalpris}">Total Pris For Udlejede Biler</th>
+                </tr>
+                <tr>
+                    <td th:if="${totalpris}" th:text="${totalprisantal}"></td>
+                    <td th:if="${totalpris}" th:text="${totalprisfinal}"></td>
+                </tr>
+            </table>
+        </div>
     </div>
+</div>
+
+<div class="button-container">
+    <button class="opretBilButton" onclick="window.location.href='/Forretningsudvikler'">Tilbage</button>
 </div>
 
 </body>

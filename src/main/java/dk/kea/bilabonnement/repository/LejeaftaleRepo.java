@@ -75,6 +75,8 @@ public class LejeaftaleRepo {
         };
         return jdbcTemplate.query(sql, rowMapper, chassisNumber);
     }
+
+    // metode er delvis lavet af chatgpt, specifikt kontakten til databasen i String sql linjen.
     public List<Integer> findSkadePrisByChassisNumber(String chassisNumber) {
         String sql = "SELECT sr.Skade_Pris " +
                 "FROM skaderapport sr " +
