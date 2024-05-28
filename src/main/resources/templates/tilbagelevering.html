@@ -87,7 +87,7 @@
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
-        <input type="hidden" name="kunde" th:value="1"> <!-- kunde går ikke videre!! !-->
+        <input type="hidden" name="kunde" th:value="${kunde}">
         <div th:each="skade : ${skadeList}">
             <input type="hidden" name="skadeList[__${skadeStat.index}__].skade" th:value="${skade.skade}">
             <input type="hidden" name="skadeList[__${skadeStat.index}__].skadePris" th:value="${skade.skadePris}">
