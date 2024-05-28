@@ -6,7 +6,7 @@ public class Skaderapport {
     private int lejeaftaleId;
     private String skade;
     private double skadePris;
-    private int medarbejderId;
+
     private int kundeId;
     public String getChassisNumber() {
         return chassisNumber;
@@ -21,18 +21,16 @@ public class Skaderapport {
     public Skaderapport() {
     }
 
-    public Skaderapport(String skade, double skadePris, int medarbejderId, int kundeId) {
+    public Skaderapport(String skade, double skadePris, int kundeId) {
         this.skade = skade;
         this.skadePris = skadePris;
-        this.medarbejderId = medarbejderId;
         this.kundeId = kundeId;
     }
 
-    public Skaderapport(int skadeId, String skade, double skadePris, int medarbejderId, int kundeId, String chassisNumber) {
+    public Skaderapport(int skadeId, String skade, double skadePris, int kundeId, String chassisNumber) {
         this.skadeId = skadeId;
         this.skade = skade;
         this.skadePris = skadePris;
-        this.medarbejderId = medarbejderId;
         this.kundeId = kundeId;
         this.chassisNumber = chassisNumber;
     }
@@ -59,14 +57,6 @@ public class Skaderapport {
 
     public void setSkadePris(double skadePris) {
         this.skadePris = skadePris;
-    }
-
-    public int getMedarbejderId() {
-        return medarbejderId;
-    }
-
-    public void setMedarbejderId(int medarbejderId) {
-        this.medarbejderId = medarbejderId;
     }
 
     public int getKundeId() {

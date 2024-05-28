@@ -59,6 +59,11 @@ public class LejeaftaleRepo {
         RowMapper<String> rowMapper = new BeanPropertyRowMapper<>(String.class);
         return jdbcTemplate.query(sql, rowMapper, chassisNumber);
     }
+    public List<Integer> findCustomerNumber (String chassisNumber) {
+        String sql = "SELECT Kunde_id FROM Lejeaftale WHERE chassisNumber = ?";
+        RowMapper<Integer> rowMapper = new BeanPropertyRowMapper<>(Integer.class);
+        return jdbcTemplate.query(sql, rowMapper, chassisNumber);
+    }
 
     public List<Integer> findUdlejningsPeriodeByChassisNumber(String chassisNumber) {
         String sql = "SELECT udlejningsperiode FROM lejeaftale WHERE chassisNumber = ?";
