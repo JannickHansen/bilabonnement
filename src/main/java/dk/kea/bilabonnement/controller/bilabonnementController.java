@@ -459,7 +459,7 @@ public class bilabonnementController {
     }
 
     @PostMapping("/addSkade")
-    public String addSkade(@ModelAttribute Skaderapport skadeRapport, @RequestParam("skade") String skade, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, Model model) {
+    public String addSkade(@ModelAttribute Skaderapport skadeRapport, @RequestParam("skade") String skade, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde_id, Model model) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
@@ -487,6 +487,7 @@ public class bilabonnementController {
         model.addAttribute("carmodel", carmodel);
         model.addAttribute("licenseplate", licenseplate);
         model.addAttribute("skadeList", temporarySkadeList);
+        model.addAttribute("kunde", kunde_id);
 
         double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
         model.addAttribute("totalPris", totalPris);
@@ -520,9 +521,10 @@ public class bilabonnementController {
             skadeService.opretSkade(skaderapport.getLejeaftaleId(), skaderapport.getSkade(), skaderapport.getSkadePris(), skaderapport.getKundeId());
         }
 
-        // Opret Pris for overkørte km pris i databasen.
-        // JANNICKKK HELP MEH
-        // skadeService.opretSkade(skaderapport.getLejeaftaleId(), "overkørte KM udgift, kmpris, skaderapport.getKundeId());
+        // temporarySkadeList indeholder kun skaderapporter af samme lejeaftale_id samt samme kunde_id, hvilket betyder, at vi
+        // kan kalde listens første objekt og bruge dennes variabler til at gemme overkørte KM for denne bil som en seperat skaderapport,
+        // som stadig kan identificeres til at tilhører denne specifikke lejeaftale.
+        skadeService.opretSkade(temporarySkadeList.getFirst().getLejeaftaleId(), "overkørte KM udgift", kmpris, temporarySkadeList.getFirst().getKundeId());
 
         // bil status ændres til Ledig og lejeaftale status til Afventerbetaling, km opdateres på bil og clearer temporarySkadeList
         bilRepo.changeStatusOnCar(chassisNumber, "Ledig");

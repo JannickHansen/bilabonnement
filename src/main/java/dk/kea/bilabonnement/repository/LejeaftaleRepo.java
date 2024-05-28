@@ -55,10 +55,10 @@ public class LejeaftaleRepo {
         RowMapper<String> rowMapper = new BeanPropertyRowMapper<>(String.class);
         return jdbcTemplate.query(sql, rowMapper, chassisNumber);
     }
-    public List<Integer> findCustomerNumber (String chassisNumber) {
-        String sql = "SELECT Kunde_id FROM Lejeaftale WHERE chassisNumber = ?";
+    public List<Integer> findCustomerNumber (int lejeaftale_id) {
+        String sql = "SELECT Kunde_id FROM Lejeaftale WHERE lejeaftale_id = ?";
         RowMapper<Integer> rowMapper = new BeanPropertyRowMapper<>(Integer.class);
-        return jdbcTemplate.query(sql, rowMapper, chassisNumber);
+        return jdbcTemplate.query(sql, rowMapper, lejeaftale_id);
     }
 
     public List<Integer> findUdlejningsPeriodeByChassisNumber(String chassisNumber) {
@@ -102,37 +102,43 @@ public class LejeaftaleRepo {
         return jdbcTemplate.query(sql, rowMapper, chassisNumber);
     }
 
+    // Metoden modtager kunde informationer som indsættes ved oprettelse af en ny lejeaftale. Denne metode er så ansvarlig for, at
+    // tjekke om kunden allerede er oprettet i databasen. Hvis kunden ikke er oprettet, opretter den en ny kunde med de indsatte informationer,
+    // og hvis kunden er oprettet, tilbage sendes kundens kunde_id.
     public int customerCheck(String Kunde_Navn, int Telefon_nummer, String Email, String Adresse) {
+        // SQL koden for begge situationer opstilles som Strings
         String selectSql = "SELECT Kunde_id FROM kunde WHERE Kunde_Navn = ? AND Telefon_nummer = ? AND Email = ? AND Adresse = ?";
         String insertSql = "INSERT INTO kunde (Kunde_Navn, Telefon_nummer, Email, Adresse) VALUES (?, ?, ?, ?)";
 
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement selectStmt = connection.prepareStatement(selectSql);
-                PreparedStatement insertStmt = connection.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS);
+                // PreparedStatements oprettes med SQL Strings
+                PreparedStatement select = connection.prepareStatement(selectSql);
+                PreparedStatement insert = connection.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS);
         ) {
-
-            selectStmt.setString(1, Kunde_Navn);
-            selectStmt.setInt(2, Telefon_nummer);
-            selectStmt.setString(3, Email);
-            selectStmt.setString(4, Adresse);
-
-            ResultSet resultSet = selectStmt.executeQuery();
-
+            select.setString(1, Kunde_Navn);
+            select.setInt(2, Telefon_nummer);
+            select.setString(3, Email);
+            select.setString(4, Adresse);
+            // Vi kalder executeQuery på vores PreparedStatement select.
+            ResultSet resultSet = select.executeQuery();
+            // Hvis executeQuery finder en række i databasen som stemmer overens med alle søge kriterier indsendt, returnere den kundens kunde_id.
+            // Ellers opretter den en ny kunde med de indsatte informationer med PreparedStatement insert, og derefter returnere den nyoprettede
+            // kundes kunde_id.
             if (resultSet.next()) {
                 return resultSet.getInt("Kunde_id");
             } else {
-                insertStmt.setString(1, Kunde_Navn);
-                insertStmt.setInt(2, Telefon_nummer);
-                insertStmt.setString(3, Email);
-                insertStmt.setString(4, Adresse);
-                insertStmt.executeUpdate();
+                insert.setString(1, Kunde_Navn);
+                insert.setInt(2, Telefon_nummer);
+                insert.setString(3, Email);
+                insert.setString(4, Adresse);
+                insert.executeUpdate();
 
-                ResultSet generatedKeys = insertStmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
+                ResultSet generatedKunde_id = insert.getGeneratedKeys();
+                if (generatedKunde_id.next()) {
+                    return generatedKunde_id.getInt(1);
                 } else {
-                    throw new SQLException("Failed to get Kunde_id for inserted row");
+                    throw new SQLException("Fandt intet Kunde_id for eftersøgte række.");
                 }
             }
         } catch (SQLException e) {
