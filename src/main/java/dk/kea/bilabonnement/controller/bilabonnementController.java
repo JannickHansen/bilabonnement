@@ -225,7 +225,7 @@ public class bilabonnementController {
         if (!brugerService.isUdvikler(request)){
             return "redirect:/";
         }
-        return "/KPIpage";
+        return "KPIpage";
     }
 
     @PostMapping("/KPIpageTables")
@@ -275,7 +275,7 @@ public class bilabonnementController {
             model.addAttribute("totalprisfinal", totalprisfinal);
         }
 
-        return "/KPIpageTables";
+        return "KPIpageTables";
     }
     @GetMapping("/registrer")
     public String registrer(Model model) {
@@ -336,7 +336,7 @@ public class bilabonnementController {
         List<Lejeaftale> lejeaftaleList = lejeaftaleRepo.findAllAfventende();
         model.addAttribute("datoliste", validationService.datoFormatteringTilVisning(lejeaftaleList));
         model.addAttribute("lejeaftaleList", lejeaftaleList);
-        return "/LejeAftale";
+        return "LejeAftale";
     }
 
     @PostMapping("/OpretLejeaftaleFejl")
@@ -491,7 +491,7 @@ public class bilabonnementController {
 
         double totalPris = skadeService.calculateTotalPris(temporarySkadeList);
         model.addAttribute("totalPris", totalPris);
-        return "/tilbagelevering";
+        return "tilbagelevering";
     }
 
     // back button på tilbagelevering.html linker hertil GetMapping clearer temporarySkadeList og redirecter tilbage til listen af biler til tilbagelevering
