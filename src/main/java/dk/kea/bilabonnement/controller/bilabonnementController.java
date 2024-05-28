@@ -508,7 +508,7 @@ public class bilabonnementController {
 
     // afslut knappen gør at man clearer temporarySkadeList og ændrer bilstatus til "Ledig", og ændrer lejeaftale status til "Afventerbetaling"
     @PostMapping("/tilbageleveringAfslut")
-    public String tilbageleveringAfslut(@RequestParam("kmpris") int kmpris, @RequestParam("nykmantal") int nykmantal, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale) {
+    public String tilbageleveringAfslut(@RequestParam("kmpris") int kmpris, @RequestParam("nykmantal") int nykmantal, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale, @RequestParam("kunde") int kunde) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
@@ -516,15 +516,13 @@ public class bilabonnementController {
 
         // Opret skaderapport i databasen.
         for (Skaderapport skaderapport : temporarySkadeList) {
-            skaderapport.setLejeaftaleId(lejeaftale);
-            skaderapport.setKundeId(skaderapport.getKundeId());
-            skadeService.opretSkade(skaderapport.getLejeaftaleId(), skaderapport.getSkade(), skaderapport.getSkadePris(), skaderapport.getKundeId());
+            skadeService.opretSkade(lejeaftale, skaderapport.getSkade(), skaderapport.getSkadePris(), kunde);
         }
 
         // temporarySkadeList indeholder kun skaderapporter af samme lejeaftale_id samt samme kunde_id, hvilket betyder, at vi
         // kan kalde listens første objekt og bruge dennes variabler til at gemme overkørte KM for denne bil som en seperat skaderapport,
         // som stadig kan identificeres til at tilhører denne specifikke lejeaftale.
-        skadeService.opretSkade(temporarySkadeList.getFirst().getLejeaftaleId(), "overkørte KM udgift", kmpris, temporarySkadeList.getFirst().getKundeId());
+        skadeService.opretSkade(lejeaftale, "overkørte KM udgift", kmpris, kunde);
 
         // bil status ændres til Ledig og lejeaftale status til Afventerbetaling, km opdateres på bil og clearer temporarySkadeList
         bilRepo.changeStatusOnCar(chassisNumber, "Ledig");
@@ -550,7 +548,7 @@ public class bilabonnementController {
         model.addAttribute("totalPris", totalPris);
         model.addAttribute("kmantal", kmantal);
 
-        double kmpris = 0;
+        int kmpris = 0;
         int udlejningsperiode = lejeaftaleRepo.findUdlejningsPeriodeByChassisNumber(chassisNumber).getFirst();
         int tilladtkmkoert = 1000 * udlejningsperiode;
         int startkm = bilRepo.getKmByChassisNumber(chassisNumber);
@@ -558,12 +556,12 @@ public class bilabonnementController {
         int drivenduringrental = kmantal - startkm;
         if (drivenduringrental > tilladtkmkoert) {
             overkoertekm = drivenduringrental - tilladtkmkoert;
-            kmpris = overkoertekm * 0.75;
+            kmpris = (int) (overkoertekm * 0.75);
         } else {
             overkoertekm = 0;
             kmpris = 0; }
 
-        double skaderapporttotal = totalPris+kmpris;
+        int skaderapporttotal = (int) totalPris+kmpris;
         int nykmantal = bilRepo.getKmByChassisNumber(chassisNumber)+kmantal;
         model.addAttribute("kmpris", kmpris);
         model.addAttribute("nykmantal", nykmantal);
@@ -574,7 +572,7 @@ public class bilabonnementController {
     }
 
     @GetMapping("/skaderapport")
-    public String skaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, @RequestParam("skadeList") List<Skaderapport> skadeList, Model model) {
+    public String skaderapport(@RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, Model model) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }
@@ -596,7 +594,7 @@ public class bilabonnementController {
         return "udskrivskaderapport";
     }
     @PostMapping("/udskrivskaderapport")
-    public String udskrivskaderapport(@RequestParam("overkoertekm") int overkoertekm, @RequestParam("skaderaporttotal") double skaderaporttotal, @RequestParam("kmpris") double kmpris, @RequestParam("kmantal") int kmantal, @RequestParam("totalPris") String totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") String lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, Model model) {
+    public String udskrivskaderapport(@RequestParam("overkoertekm") int overkoertekm, @RequestParam("skaderaporttotal") int skaderaporttotal, @RequestParam("kmpris") int kmpris, @RequestParam("kmantal") int kmantal, @RequestParam("totalPris") double totalPris, @RequestParam("chassisNumber") String chassisNumber, @RequestParam("lejeaftale") int lejeaftale, @RequestParam("brand") String brand, @RequestParam("carmodel") String carmodel, @RequestParam("licenseplate") String licenseplate, @RequestParam("kunde") int kunde, Model model) {
         if (!brugerService.isSkade(request)) {
             return "redirect:/";
         }

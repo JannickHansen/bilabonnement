@@ -16,17 +16,9 @@
 <!-- lavet af Thomas !-->
 <body>
 
-
-<form class="no-print" th:action="@{/tilbageleveringAfslut}" method="post">
-    <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
-    <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
-    <input type="hidden" name="nykmantal" th:value="${nykmantal}">
-    <input type="hidden" name="nykmantal" th:value="${kmpris}">
-    <div class="button-container">
-        <button class="opretBilButton" onclick="window.location.href='/tilbageleveringAfslut'">Afslut tilbagelevering</button>
-    </div>
-</form>
-
+<div class="button-container">
+    <button class="opretBilButton" onclick="window.history.back()">Tilbage til skaderapporten</button>
+</div>
 
 <div class="skaderapport-container">
     <div class="bilinfo-box">
@@ -65,7 +57,7 @@
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
-        <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->
+        <input type="hidden" name="kunde" th:value="${kunde}">
         <input type="hidden" name="overkoertekm" th:value="${overkoertekm}">
         <input type="hidden" name="kmpris" th:value="${kmpris}">
         <input type="hidden" name="skaderaporttotal" th:value="${skaderaporttotal}">
