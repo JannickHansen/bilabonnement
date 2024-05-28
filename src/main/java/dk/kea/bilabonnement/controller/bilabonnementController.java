@@ -244,31 +244,26 @@ public class bilabonnementController {
         if (!brugerService.isUdvikler(request)){
             return "redirect:/";
         }
-
         List<BilModel> bilList = kpiService.kpiManageCriteria(bilstatus, brand, carModel, type, fuel);
         model.addAttribute("bilList",bilList);
-
         if (gnslejeperiode) {
             int lejeperiodefinal = kpiService.gnslejeperiodehent(bilList);
 
             model.addAttribute("gnslejeperiode", gnslejeperiode);
             model.addAttribute("lejeperiodefinal", lejeperiodefinal);
         }
-
         if (gnsskadepris) {
             int skadeprisfinal = kpiService.gnsskadeprishent(bilList);
 
             model.addAttribute("gnsskadepris", gnsskadepris);
             model.addAttribute("skadeprisfinal", skadeprisfinal);
         }
-
         if (gnsudlejepris) {
             double udlejeprisfinal = kpiService.gnsudlejepris(bilList);
 
             model.addAttribute("gnsudlejepris", gnsudlejepris);
             model.addAttribute("udlejeprisfinal", udlejeprisfinal);
         }
-
         if (totalpris) {
             List<Integer> totalprislist = kpiService.totalpris();
             int totalprisantal = totalprislist.get(0);
@@ -278,7 +273,6 @@ public class bilabonnementController {
             model.addAttribute("totalprisantal", totalprisantal);
             model.addAttribute("totalprisfinal", totalprisfinal);
         }
-
 
         return "/KPIpageTables";
     }

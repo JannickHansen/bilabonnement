@@ -121,7 +121,6 @@ public class LejeaftaleRepo {
             if (resultSet.next()) {
                 return resultSet.getInt("Kunde_id");
             } else {
-                // Insert new row
                 insertStmt.setString(1, Kunde_Navn);
                 insertStmt.setInt(2, Telefon_nummer);
                 insertStmt.setString(3, Email);
