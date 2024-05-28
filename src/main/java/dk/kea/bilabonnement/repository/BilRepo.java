@@ -2,7 +2,6 @@ package dk.kea.bilabonnement.repository;
 
 import dk.kea.bilabonnement.model.BilModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -72,10 +71,11 @@ public class BilRepo {
         return loadCars("SELECT * FROM bil");
     }
 
-    public List<BilModel> loadLeasedCars() {
-        return loadCars("SELECT * FROM bil WHERE status = 'udlejet' ORDER BY status");
-    }
-
+    // Metoden modtager bruger-input fra controlleren for /KPIpageTables, og er ansvarlig for at sortere tabellen
+    // for biler som lever op til brugerens ønskede input. Metoden bruger en String-builder til at sammensætte
+    // en samlet String som bruges som vores SQL Query som sendes til en metode som henter alle biler som lever op til searchCriteria.
+    // Det sættes op som (SELECT * FROM bil WHERE (searchCriteria)) efterfulgt af AND så længe at listen indeholder yderligere searchCriteria.
+    // Hvis ingen searchCriteria findes, sendes dette også til metoden, som så returnere alle biler.
     public List<BilModel> searchByKPI(String status, String brand, String carModel, String type, String fuel) {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM bil");
 
