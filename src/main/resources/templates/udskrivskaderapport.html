@@ -20,10 +20,13 @@
 <form class="no-print" th:action="@{/tilbageleveringAfslut}" method="post">
     <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
     <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
+    <input type="hidden" name="nykmantal" th:value="${nykmantal}">
+    <input type="hidden" name="nykmantal" th:value="${kmpris}">
     <div class="button-container">
-        <button class="opretBilButton" onclick="window.close()">Afslut tilbagelevering</button>
+        <button class="opretBilButton" onclick="window.location.href='/tilbageleveringAfslut'">Afslut tilbagelevering</button>
     </div>
 </form>
+
 
 <div class="skaderapport-container">
     <div class="bilinfo-box">
@@ -33,8 +36,9 @@
         <h2>Lejeaftale nr: <span th:text="${lejeaftale}"></span><br><br>
             <span th:text="${brand}"></span>  <span th:text="${carmodel}"></span><br>
             <span th:text="${licenseplate}"></span><br>
+            km: <span th:text="${kmantal}"></span><br><br>
             Stelnr: <span th:text="${chassisNumber}"></span><br>
-            Kunde: <span th:text="${kunde}"></span>
+            Kunde id: <span th:text="${kunde}"></span><br>
         </h2>
 
     </div>
@@ -52,7 +56,8 @@
         </tr>
         </tbody>
     </table>
-    <br><h2>Sammenlagt pris for skaderapport: <span th:text="${totalPris}+kr."></span></h2>
+    <br><h3>Jf. betingelser er det tilladt at køre 1000km pr måned. <br>Overkørte km: <span th:text="${overkoertekm}+km"><br></span> - udgør merpris på: <span th:text="${kmpris}+kr."></span></h3>
+    <br><h2>Sammenlagt pris for skaderapport: <span th:text="${skaderaporttotal}+kr."></span></h2>
     <form class="skaderapport-form" th:action="@{/udskrivskaderapport}" method="post">
         <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
         <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
@@ -60,8 +65,11 @@
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
-        <input type="hidden" name="medarbejder" value="1"> <!-- skal rettes -->
         <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->
+        <input type="hidden" name="overkoertekm" th:value="${overkoertekm}">
+        <input type="hidden" name="kmpris" th:value="${kmpris}">
+        <input type="hidden" name="skaderaporttotal" th:value="${skaderaporttotal}">
+        <input type="hidden" name="kmantal" th:value="${kmantal}">
         <button class="small-button no-print" type="submit" onclick="window.print()">Udskriv</button>
     </form>
 

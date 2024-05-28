@@ -37,7 +37,9 @@
         <input type="hidden" name="licenseplate" th:value="${licenseplate}">
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
-    <button class="fastskade-button" type="submit" name="skade" value="Ridset alufælg">Ridset alufælg<br>400kr</button>
+        <input type="hidden" name="kunde" th:value="${kunde}">
+
+        <button class="fastskade-button" type="submit" name="skade" value="Ridset alufælg">Ridset alufælg<br>400kr</button>
     <button class="fastskade-button" type="submit" name="skade" value="Ny forrude">Ny forrude<br>3000kr</button>
     <button class="fastskade-button" type="submit" name="skade" value="Lakfelt">Lakfelt<br>1500kr</button>
     <br><br>
@@ -50,6 +52,7 @@
         <input type="hidden" name="licenseplate" th:value="${licenseplate}">
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
+        <input type="hidden" name="kunde" th:value="${kunde}">
     <input type="text" class="input-box" name="skade" placeholder="Skade" required>
     <input type="number" class="input-box" name="skadePris" placeholder="Pris" required><br><br>
     <button class="small-button" type="submit">Tilføj Skade</button>
@@ -84,12 +87,12 @@
         <input type="hidden" name="brand" th:value="${brand}">
         <input type="hidden" name="carmodel" th:value="${carmodel}">
         <input type="hidden" name="totalPris" th:value="${totalPris}">
-        <input type="hidden" name="medarbejder" value="1"> <!-- skal rettes -->
-        <input type="hidden" name="kunde" value="1"> <!-- skal rettes -->
+        <input type="hidden" name="kunde" th:value="1"> <!-- kunde går ikke videre!! !-->
         <div th:each="skade : ${skadeList}">
             <input type="hidden" name="skadeList[__${skadeStat.index}__].skade" th:value="${skade.skade}">
             <input type="hidden" name="skadeList[__${skadeStat.index}__].skadePris" th:value="${skade.skadePris}">
         </div>
+        <input type="number" class="input-box" name="kmantal" th:value="${kmantal}" placeholder="Indtast nuværende km" required><br><br>
         <button class="small-button" type="submit">Godkend samlet tilbageleveringspris</button>
     </form>
 </div>

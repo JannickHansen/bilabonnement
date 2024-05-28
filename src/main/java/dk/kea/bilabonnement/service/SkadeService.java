@@ -13,7 +13,7 @@ public class SkadeService {
     @Autowired
     private SkadeRepo skadeRepo;
 
-    public void opretSkade(String skade, int lejeaftale, double skadePris, int kundeId) {
+    public void opretSkade(int lejeaftale, String skade, double skadePris, int kundeId) {
         Skaderapport skaderapport = new Skaderapport();
         skaderapport.setSkade(skade);
         skaderapport.setLejeaftaleId(lejeaftale);

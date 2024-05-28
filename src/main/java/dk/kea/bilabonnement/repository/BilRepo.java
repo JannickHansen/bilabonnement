@@ -139,6 +139,11 @@ public class BilRepo {
         jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
     }
 
+    // Metode som modtager chassisnummer og den nye km, og så opdatere km
+    public void changeKmOnCar(String chassisNumber, int newKm) {
+        final String UPDATE_STATUS_BY_CHASSISNUMBER_SQL = "UPDATE bil SET km = ? WHERE chassisNumber = ?";
+        jdbcTemplate.update(UPDATE_STATUS_BY_CHASSISNUMBER_SQL, newKm, chassisNumber);
+    }
 
     // Metode som modtager chassisnummer og den nye status, og så opdatere status
     public void changeStatusOnCar(String chassisNumber, String newStatus) {
@@ -150,5 +155,16 @@ public class BilRepo {
         String sql = "SELECT * FROM Bil WHERE status = 'Ledig'";
         RowMapper<BilModel> rowMapper = new BeanPropertyRowMapper<>(BilModel.class);
         return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    // Metode til at finde en bils km antal fra databasen ud fra chassisNumber
+    public int getKmByChassisNumber(String chassisNumber) {
+        String sql = "SELECT km FROM Bil WHERE chassisNumber = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{chassisNumber}, Integer.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }
