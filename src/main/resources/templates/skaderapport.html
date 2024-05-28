@@ -55,7 +55,7 @@
 </table>
 <br><h3>Jf. betingelser er det tilladt at køre 1000km pr måned. <br>Overkørte km: <span th:text="${overkoertekm}+km"><br></span> - udgør merpris på: <span th:text="${kmpris}+kr."></span></h3>
 <br><h2>Sammenlagt pris for skaderapport: <span th:text="${skaderaporttotal}+kr."></span></h2>
-    <form class="skaderapport-form" th:action="@{/udskrivskaderapport}" method="post">
+    <form class="skaderapport-form" th:action="@{/udskrivskaderapport}" method="post" target="_blank">
         <input type="hidden" name="chassisNumber" th:value="${chassisNumber}">
         <input type="hidden" name="lejeaftale" th:value="${lejeaftale}">
         <input type="hidden" name="licenseplate" th:value="${licenseplate}">

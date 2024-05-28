@@ -135,8 +135,13 @@ public class BilRepo {
     }
 
     public void deleteChassisNumber(String chassisNumber) {
+        final String DISABLE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
+        final String ACTIVATE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
         final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
+
+        jdbcTemplate.execute(DISABLE_FK_CHECK);
         jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
+        jdbcTemplate.execute(ACTIVATE_FK_CHECK);
     }
 
     // Metode som modtager chassisnummer og den nye km, og så opdatere km
