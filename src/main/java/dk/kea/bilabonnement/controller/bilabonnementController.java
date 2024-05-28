@@ -32,7 +32,6 @@ import java.util.Objects;
 public class bilabonnementController {
     @Autowired
     BrugerRepo brugerRepo;
-
     @Autowired
     BilRepo bilRepo;
     @Autowired
@@ -45,6 +44,8 @@ public class bilabonnementController {
     BrugerService brugerService;
     @Autowired
     ValidationService validationService;
+    @Autowired
+    private SkadeService skadeService;
     @Autowired
     SkadeRepo skadeRepo;
 
@@ -433,9 +434,6 @@ public class bilabonnementController {
         model.addAttribute("Lejeaftale", lejeaftaler);
         return "vaelglejeaftale";
     }
-
-    @Autowired
-    private SkadeService skadeService;
 
     private List<Skaderapport> temporarySkadeList = new ArrayList<>();
 
