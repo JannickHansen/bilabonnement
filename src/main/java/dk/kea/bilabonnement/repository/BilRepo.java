@@ -134,7 +134,8 @@ public class BilRepo {
         return foundCars;
     }
 
-    public void deleteChassisNumber(String chassisNumber) {
+    // Original jdbc kodeTemplate kode.
+    /*public void deleteChassisNumber(String chassisNumber) {
         final String DISABLE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
         final String ACTIVATE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
         final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
@@ -142,7 +143,77 @@ public class BilRepo {
         jdbcTemplate.execute(DISABLE_FK_CHECK);
         jdbcTemplate.update(DELETE_BY_CHASSISNUMBER_SQL, chassisNumber);
         jdbcTemplate.execute(ACTIVATE_FK_CHECK);
+    }*/
+
+    // JDBC og mySQL driver har indbygget anti-SQL injection, som f.eks. forhindre
+    // multi-Query input (så du kan f.eks. ikke SQL-inject DELETE i en linje som allerede har CREATE.
+    // Derudover bruger JDBCtemplate automatisk preparedStatement, netop så man ikke kan SQL-inject.
+    // Man kan dog stadig bruge preparedStatement med vulnerabilities som:
+    // "DELETE FROM bil WHERE chassisNumber = '" + chassisNumber + "'";
+    // i stedet for
+    // "DELETE FROM bil WHERE chassisNumber = ?";
+    // Det største problem ved statement er at det tillader multi-queries, men ud fra min testing kunne
+    // JDBC og mySQL driveren fange dem alle. dog utroligt svag mod input som vist følgende,:
+
+    // test til statement: ABC123' OR '1'='1
+    // String bliver til:  DELETE FROM bil WHERE chassisNumber = 'ABC123'' OR ''1''=''1';;
+    // enkeltanførelsestegnene ' bliver ændret til '' hvilket gør hele inputtet til en samlet streng.
+    // Derfor kan logic som 'OR', '=' og lignende ikke påvirker logikken i queriet.
+
+    // Hvis: 1 OR 1=1
+    // Læses som '1 OR 1=1', altså et samlet stykke String data, men ikke udførbart SQL kode.
+    // Det parameteriseret så det er en samlet værdi, og altså ikke læses som del af SQL query, men i stedet som
+    // en string værdi.
+    public void deleteChassisNumber(String chassisNumber) {
+        final String DISABLE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
+        final String ACTIVATE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
+        final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            statement.execute(DISABLE_FK_CHECK);
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_CHASSISNUMBER_SQL)) {
+                preparedStatement.setString(1, chassisNumber);
+                preparedStatement.executeUpdate();
+            }
+
+            statement.execute(ACTIVATE_FK_CHECK);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
+    // test til statement: ABC123' OR '1'='1
+    // String bliver til:  DELETE FROM bil WHERE chassisNumber = 'ABC123' OR '1'='1';
+    // Den tilføjer input direkte ind i stringen og executer så hele stringen.
+
+    // Hvis 1 OR 1=1, sker intet, da 'OR' ikke markeres som SQL med '.
+    // Derfor læses det hele som én data-værdi i formen string.
+
+    // Hvis 1' OR '1'='1
+    // String bliver til: DELETE FROM bil WHERE chassisNumber = '1' OR '1'='1';
+    // Derfor også executable
+    /*public void deleteChassisNumber(String chassisNumber) {
+        final String DISABLE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 0";
+        final String ACTIVATE_FK_CHECK = "SET FOREIGN_KEY_CHECKS = 1";
+        final String DELETE_BY_CHASSISNUMBER_SQL = "DELETE FROM bil WHERE chassisNumber = '" + chassisNumber + "'";
+
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            statement.execute(DISABLE_FK_CHECK);
+            statement.executeUpdate(DELETE_BY_CHASSISNUMBER_SQL);
+            statement.execute(ACTIVATE_FK_CHECK);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     // Metode som modtager chassisnummer og den nye km, og så opdatere km
     public void changeKmOnCar(String chassisNumber, int newKm) {
