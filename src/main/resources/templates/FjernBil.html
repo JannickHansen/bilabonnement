@@ -22,19 +22,23 @@
         <h2>Fjern Bil Fra Fleet List</h2>
         <div th:each="bil : ${fleetList}" class="carboxfjern">
             <form action="/FjernBil" method="post" onsubmit="return confirm('Er du sikker på at denne bil skal fjernes?')">
+                <h3 th:text="${bil.carModel} + ' (' + ${bil.brand} + ')'"></h3>
+                <p><strong>Stelnummer:</strong> <span th:text="${bil.chassisNumber}"></span></p>
+                <p><strong>Type:</strong> <span th:text="${bil.type}"></span></p>
+                <p><strong>Nummerplade:</strong> <span th:text="${bil.licensePlate}"></span></p>
+                <p><strong>Brændstof:</strong> <span th:text="${bil.fuel}"></span></p>
+                <p><strong>Status:</strong> <span th:text="${bil.status}"></span></p>
+
                 <input type="hidden" name="chassisNumber" th:value="${bil.chassisNumber}">
-                <button type="submit" class="carboxfjern">
-            <h3 th:text="${bil.carModel} + ' (' + ${bil.brand} + ')'"></h3>
-            <p><strong>Stelnummer:</strong> <span th:text="${bil.chassisNumber}"></span></p>
-            <p><strong>Type:</strong> <span th:text="${bil.type}"></span></p>
-            <p><strong>Nummerplade:</strong> <span th:text="${bil.licensePlate}"></span></p>
-            <p><strong>Brændstof:</strong> <span th:text="${bil.fuel}"></span></p>
-            <p><strong>Status:</strong> <span th:text="${bil.status}"></span></p>
-                </button>
+
+                <label for="chassisNumber">Indtast Stelnummer for at bekræfte:</label>
+                <input type="text" name="chassisNumber" id="chassisNumber" placeholder="Indtast Stelnummer" required>
+                <button type="submit" class="fjernKnappen">Fjern Bil</button>
             </form>
         </div>
     </div>
 </div>
+
 
 
 </body>
